@@ -1,88 +1,72 @@
 <script lang="ts">
-	import { Image, Eye } from 'lucide-svelte';
+	import { Eye } from 'lucide-svelte';
+	import { onMount } from 'svelte';
 
 	interface Props {
-		onEyesComplete?: () => void;
-		onEyesFading?: () => void;
+		onAnimationComplete?: () => void;
+		onHover?: () => void;
+		onLeave?: () => void;
 	}
 
-	let { onEyesComplete, onEyesFading }: Props = $props();
+	let { onAnimationComplete, onHover, onLeave }: Props = $props();
 
 	let showEye = $state(false);
 	let showText = $state(false);
-	let fading = $state(false);
-	let timeouts: ReturnType<typeof setTimeout>[] = [];
+	let animationComplete = $state(false);
 
-	function clearAllTimeouts() {
-		timeouts.forEach(t => clearTimeout(t));
-		timeouts = [];
-	}
+	onMount(() => {
+		// Start animation automatically
+		setTimeout(() => {
+			showEye = true;
+		}, 300);
+
+		// Show text after eye appears
+		setTimeout(() => {
+			showText = true;
+		}, 1300);
+
+		// Mark animation complete
+		setTimeout(() => {
+			animationComplete = true;
+			onAnimationComplete?.();
+		}, 2500);
+	});
 
 	function handleMouseEnter() {
-		clearAllTimeouts();
-		fading = false;
-		showEye = true;
-
-		// After eye appears and starts blinking, show the text
-		timeouts.push(setTimeout(() => {
-			showText = true;
-		}, 1000));
-
-		// Trigger callback after text appears
-		timeouts.push(setTimeout(() => {
-			onEyesComplete?.();
-		}, 2500));
+		if (animationComplete) {
+			onHover?.();
+		}
 	}
 
 	function handleMouseLeave() {
-		clearAllTimeouts();
-		onEyesFading?.();
-		fading = true;
-
-		// Wait 1s, then fade out
-		timeouts.push(setTimeout(() => {
-			showText = false;
-		}, 1000));
-
-		timeouts.push(setTimeout(() => {
-			showEye = false;
-			fading = false;
-		}, 1400));
+		if (animationComplete) {
+			onLeave?.();
+		}
 	}
 </script>
 
 <div
-	class="stego-container"
+	class="logo-container"
 	onmouseenter={handleMouseEnter}
 	onmouseleave={handleMouseLeave}
 	role="img"
-	aria-label="Plainsight animation"
+	aria-label="Plainsight logo"
 >
-	<!-- The logo text with eye -->
-	<div class="logo-text" class:visible={showEye} class:fading>
-		<span class="text-part left" class:visible={showText} class:fading>pl</span>
-		<span class="eye-letter" class:visible={showEye} class:fading>
+	<div class="logo-text">
+		<span class="text-part left" class:visible={showText}>pl</span>
+		<span class="eye-letter" class:visible={showEye}>
 			<Eye size={32} strokeWidth={1.5} />
 		</span>
-		<span class="text-part right" class:visible={showText} class:fading>insight</span>
-	</div>
-
-	<!-- Image icon trigger -->
-	<div class="image-icon">
-		<Image size={48} strokeWidth={1.5} class="text-fg-muted" />
+		<span class="text-part right" class:visible={showText}>insight</span>
 	</div>
 </div>
 
 <style>
-	.stego-container {
+	.logo-container {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		cursor: pointer;
-	}
-
-	.image-icon {
-		padding: 8px;
 	}
 
 	.logo-text {
@@ -90,7 +74,6 @@
 		align-items: center;
 		justify-content: center;
 		height: 40px;
-		margin-bottom: 8px;
 		font-size: 1.5rem;
 		font-weight: 400;
 		letter-spacing: 0.05em;
@@ -115,11 +98,6 @@
 		transform: translateX(0);
 	}
 
-	.text-part.fading {
-		opacity: 0;
-		transition: opacity 0.3s ease-out;
-	}
-
 	.eye-letter {
 		display: inline-flex;
 		align-items: center;
@@ -135,13 +113,6 @@
 		opacity: 1;
 		transform: scale(1);
 		animation: blink 3s ease-in-out infinite;
-	}
-
-	.eye-letter.fading {
-		opacity: 0;
-		transform: scale(0.3);
-		transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-		animation: none;
 	}
 
 	@keyframes blink {

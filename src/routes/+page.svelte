@@ -299,8 +299,8 @@
 		<div class="max-w-md text-center animate-in">
 			<div class="flex justify-center mb-8">
 				<StegoAnimation
-					onEyesComplete={() => showHiddenText = true}
-					onEyesFading={() => showHiddenText = false}
+					onHover={() => showHiddenText = true}
+					onLeave={() => showHiddenText = false}
 				/>
 			</div>
 
