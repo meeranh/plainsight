@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
-	--font-mono: 'Iosevka', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+	--font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
 
 	/* Gruvbox Dark */
 	--color-bg: #1d2021;
