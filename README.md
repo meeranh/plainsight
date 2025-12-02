@@ -1,38 +1,84 @@
-# sv
+<p align="center">
+  <br>
+  <br>
+  <br>
+</p>
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+<pre align="center">
+██████╗ ██╗      █████╗ ██╗███╗   ██╗███████╗██╗ ██████╗ ██╗  ██╗████████╗
+██╔══██╗██║     ██╔══██╗██║████╗  ██║██╔════╝██║██╔════╝ ██║  ██║╚══██╔══╝
+██████╔╝██║     ███████║██║██╔██╗ ██║███████╗██║██║  ███╗███████║   ██║
+██╔═══╝ ██║     ██╔══██║██║██║╚██╗██║╚════██║██║██║   ██║██╔══██║   ██║
+██║     ███████╗██║  ██║██║██║ ╚████║███████║██║╚██████╔╝██║  ██║   ██║
+╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝
+</pre>
 
-## Creating a project
+<p align="center">
+  <br>
+  <em>some things are hidden in plain sight</em>
+  <br>
+  <br>
+</p>
 
-If you're seeing this, you've probably already done this step. Congrats!
+<br>
+<br>
 
-```sh
-# create a new project in the current directory
-npx sv create
+---
 
-# create a new project in my-app
-npx sv create my-app
+<br>
+
+### what
+
+hide encrypted messages inside ordinary images.
+
+no one knows they're there. not even quantum computers.
+
+<br>
+
+### why
+
+because privacy shouldn't require trust.
+
+because sometimes you need to send secrets through places that are watching.
+
+because the best hiding spot is in plain sight.
+
+<br>
+
+### how
+
+```
+message ─── ML-KEM-768 ─── AES-256-GCM ─── LSB ─── image.png
 ```
 
-## Developing
+**ml-kem-768** — post-quantum key encapsulation. safe from shor's algorithm.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+**aes-256-gcm** — symmetric encryption with authentication.
 
-```sh
-npm run dev
+**lsb steganography** — hides data in the least significant bits of pixels. invisible to the eye.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+<br>
 
-## Building
-
-To create a production version of your app:
+### run
 
 ```sh
-npm run build
+git clone https://github.com/meeranh/plainsight.git
+cd plainsight
+pnpm install
+pnpm dev
 ```
 
-You can preview the production build with `npm run preview`.
+open `http://localhost:5173`
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+<br>
+
+---
+
+<p align="center">
+  <br>
+  <sub>
+    the walls have eyes. make sure yours are hidden.
+  </sub>
+  <br>
+  <br>
+</p>
