@@ -8,24 +8,10 @@
 
 	let { onEyesComplete, onEyesFading }: Props = $props();
 
-	const NUM_EYES = 12;
-	const RADIUS = 280; // pixels from center
-
-	let showEyes = $state(false);
-	let eyeStates = $state<number[]>(Array(NUM_EYES).fill(0)); // 0=hidden, 1=visible, 2=fading
+	let showEye = $state(false);
+	let showText = $state(false);
+	let fading = $state(false);
 	let timeouts: ReturnType<typeof setTimeout>[] = [];
-
-	// Random blink durations for each eye (1.5s to 3.5s)
-	const blinkDurations = Array(NUM_EYES).fill(0).map(() => 1.5 + Math.random() * 2);
-
-	// Calculate positions in a circle (starting from top, going clockwise)
-	const eyePositions = Array(NUM_EYES).fill(0).map((_, i) => {
-		const angle = (i / NUM_EYES) * 2 * Math.PI - Math.PI / 2; // Start from top
-		return {
-			x: Math.cos(angle) * RADIUS,
-			y: Math.sin(angle) * RADIUS
-		};
-	});
 
 	function clearAllTimeouts() {
 		timeouts.forEach(t => clearTimeout(t));
@@ -34,125 +20,136 @@
 
 	function handleMouseEnter() {
 		clearAllTimeouts();
-		showEyes = true;
+		fading = false;
+		showEye = true;
 
-		// Appear in circular fashion (one by one)
-		for (let i = 0; i < NUM_EYES; i++) {
-			timeouts.push(setTimeout(() => {
-				eyeStates[i] = 1;
-				eyeStates = [...eyeStates];
-			}, i * 80)); // 80ms between each eye
-		}
+		// After eye appears and starts blinking, show the text
+		timeouts.push(setTimeout(() => {
+			showText = true;
+		}, 1000));
 
-		// After all eyes formed + 1 second, trigger callback
+		// Trigger callback after text appears
 		timeouts.push(setTimeout(() => {
 			onEyesComplete?.();
-		}, NUM_EYES * 80 + 1000));
+		}, 2500));
 	}
 
 	function handleMouseLeave() {
 		clearAllTimeouts();
 		onEyesFading?.();
+		fading = true;
 
-		// Wait 1s, then disappear in circular fashion
-		for (let i = 0; i < NUM_EYES; i++) {
-			timeouts.push(setTimeout(() => {
-				eyeStates[i] = 2;
-				eyeStates = [...eyeStates];
-			}, 1000 + i * 150)); // 150ms between each fade
-		}
+		// Wait 1s, then fade out
+		timeouts.push(setTimeout(() => {
+			showText = false;
+		}, 1000));
 
 		timeouts.push(setTimeout(() => {
-			showEyes = false;
-			eyeStates = Array(NUM_EYES).fill(0);
-		}, 1000 + NUM_EYES * 150 + 500));
+			showEye = false;
+			fading = false;
+		}, 1400));
 	}
 </script>
 
 <div
-	class="stego-trigger"
+	class="stego-container"
 	onmouseenter={handleMouseEnter}
 	onmouseleave={handleMouseLeave}
 	role="img"
-	aria-label="Steganography animation"
+	aria-label="Plainsight animation"
 >
-	<Image size={48} strokeWidth={1.5} class="text-fg-muted" />
+	<!-- The logo text with eye -->
+	<div class="logo-text" class:visible={showEye} class:fading>
+		<span class="text-part left" class:visible={showText} class:fading>pl</span>
+		<span class="eye-letter" class:visible={showEye} class:fading>
+			<Eye size={32} strokeWidth={1.5} />
+		</span>
+		<span class="text-part right" class:visible={showText} class:fading>insight</span>
+	</div>
+
+	<!-- Image icon trigger -->
+	<div class="image-icon">
+		<Image size={48} strokeWidth={1.5} class="text-fg-muted" />
+	</div>
 </div>
 
-<!-- Eyes in a circle around center -->
-{#if showEyes}
-	{#each eyePositions as pos, i}
-		<div
-			class="eye"
-			class:visible={eyeStates[i] === 1}
-			class:fade-out={eyeStates[i] === 2}
-			style="
-				--blink-duration: {blinkDurations[i]}s;
-				--x: {pos.x}px;
-				--y: {pos.y}px;
-			"
-		>
-			<Eye size={24} strokeWidth={1.5} />
-		</div>
-	{/each}
-{/if}
-
 <style>
-	.stego-trigger {
+	.stego-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 		cursor: pointer;
+	}
+
+	.image-icon {
 		padding: 8px;
 	}
 
-	.eye {
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y)));
+	.logo-text {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 40px;
+		margin-bottom: 8px;
+		font-size: 1.5rem;
+		font-weight: 400;
+		letter-spacing: 0.05em;
+	}
+
+	.text-part {
+		color: var(--color-fg);
+		opacity: 0;
+		transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+	}
+
+	.text-part.left {
+		transform: translateX(10px);
+	}
+
+	.text-part.right {
+		transform: translateX(-10px);
+	}
+
+	.text-part.visible {
+		opacity: 1;
+		transform: translateX(0);
+	}
+
+	.text-part.fading {
+		opacity: 0;
+		transition: opacity 0.3s ease-out;
+	}
+
+	.eye-letter {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		color: var(--color-red);
 		opacity: 0;
-		z-index: 50;
-		pointer-events: none;
+		transform: scale(0.3);
+		transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+		margin: 0 -2px;
 	}
 
-	.eye.visible {
-		animation:
-			fadeIn 400ms ease-out forwards,
-			blink var(--blink-duration) ease-in-out 600ms infinite;
-	}
-
-	.eye.fade-out {
+	.eye-letter.visible {
 		opacity: 1;
-		animation: fadeOut 400ms ease-out forwards;
+		transform: scale(1);
+		animation: blink 3s ease-in-out infinite;
 	}
 
-	@keyframes fadeIn {
-		from {
-			opacity: 0;
-			transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0.3);
-		}
-		to {
-			opacity: 1;
-			transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1);
-		}
-	}
-
-	@keyframes fadeOut {
-		from {
-			opacity: 1;
-			transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1);
-		}
-		to {
-			opacity: 0;
-			transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0.3);
-		}
+	.eye-letter.fading {
+		opacity: 0;
+		transform: scale(0.3);
+		transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+		animation: none;
 	}
 
 	@keyframes blink {
 		0%, 85%, 100% {
-			transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scaleY(1);
+			transform: scaleY(1);
 		}
-		92% {
-			transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scaleY(0.1);
+		90%, 95% {
+			transform: scaleY(0.1);
 		}
 	}
 </style>
