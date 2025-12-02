@@ -53,7 +53,7 @@ async function deriveAESKey(sharedSecret: Uint8Array): Promise<CryptoKey> {
 			name: 'HKDF',
 			hash: 'SHA-256',
 			salt: new Uint8Array(32),
-			info: new TextEncoder().encode('pq-stego-aes-key')
+			info: new TextEncoder().encode('plainsight-aes-key')
 		},
 		keyMaterial,
 		{ name: 'AES-GCM', length: 256 },

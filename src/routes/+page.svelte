@@ -282,7 +282,7 @@
 </script>
 
 <svelte:head>
-	<title>pq-stego</title>
+	<title>plainsight</title>
 </svelte:head>
 
 <!-- Toast notification -->

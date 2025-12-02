@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>how it works - pq-stego</title>
+	<title>how it works - plainsight</title>
 </svelte:head>
 
 <main class="min-h-screen px-6 py-12 max-w-2xl mx-auto">
@@ -24,7 +24,7 @@
 			<h1 class="text-fg text-xl mb-4">how it works</h1>
 			<div class="h-px bg-border mb-6"></div>
 			<p class="text-fg-muted leading-relaxed">
-				a technical overview of how pq-stego combines post-quantum
+				a technical overview of how plainsight combines post-quantum
 				cryptography with steganography to hide encrypted messages
 				inside ordinary images.
 			</p>

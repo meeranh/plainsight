@@ -1,6 +1,6 @@
 import { toBase64, fromBase64, type KeyPair } from './crypto';
 
-const STORAGE_KEY = 'pq-stego-keypair';
+const STORAGE_KEY = 'plainsight-keypair';
 
 export function saveKeyPair(keyPair: KeyPair): void {
 	const data = {
