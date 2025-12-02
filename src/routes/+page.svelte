@@ -19,6 +19,7 @@
 	} from '$lib/stego';
 	import { saveKeyPair, loadKeyPair, hasKeyPair } from '$lib/storage';
 	import { onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
 
 	type Mode = 'landing' | 'send' | 'receive';
 	type ReceiveStep = 'init' | 'keys' | 'decrypt' | 'result';
@@ -392,12 +393,16 @@
 							never share this. stored locally in your browser.
 						</p>
 
-						<div class="border border-border p-4 mb-4 break-all text-sm text-fg-muted font-mono bg-bg-card">
-							{#if showPrivateKey}
-								{keyPair ? toBase64(keyPair.secretKey) : ''}
-							{:else}
-								{'•'.repeat(64)}
-							{/if}
+						<div class="border border-border p-4 mb-4 break-all text-sm text-fg-muted font-mono bg-bg-card overflow-hidden">
+							{#key showPrivateKey}
+								<div transition:slide={{ duration: 150 }}>
+									{#if showPrivateKey}
+										{keyPair ? toBase64(keyPair.secretKey) : ''}
+									{:else}
+										{'•'.repeat(64)}
+									{/if}
+								</div>
+							{/key}
 						</div>
 
 						<div class="flex gap-4 mb-8 items-center">
