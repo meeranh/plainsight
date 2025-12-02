@@ -25,6 +25,7 @@
 	"dependencies": {
 		"@fontsource/iosevka": "^5.2.5",
 		"@noble/post-quantum": "^0.5.2",
+		"lucide-svelte": "^0.555.0",
 		"mermaid": "^11.12.1"
 	}
 }

@@ -20,6 +20,7 @@
 	import { saveKeyPair, loadKeyPair, hasKeyPair } from '$lib/storage';
 	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
+	import StegoAnimation from '$lib/components/StegoAnimation.svelte';
 
 	type Mode = 'landing' | 'send' | 'receive';
 	type ReceiveStep = 'init' | 'keys' | 'decrypt' | 'result';
@@ -293,6 +294,10 @@
 <main class="flex min-h-screen flex-col items-center justify-center px-6 py-12">
 	{#if mode === 'landing'}
 		<div class="max-w-md text-center animate-in">
+			<div class="flex justify-center mb-8">
+				<StegoAnimation />
+			</div>
+
 			<p class="text-fg-muted leading-relaxed">
 				encrypt and hide messages<br />
 				in images using post-quantum<br />
