@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Diagram from '$lib/components/Diagram.svelte';
+
 	function goBack() {
 		history.back();
 	}
@@ -38,20 +40,39 @@
 				your message is both encrypted and hidden:
 			</p>
 
-			<pre class="text-aqua text-sm overflow-x-auto mb-6 leading-relaxed">
-{`
-  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
-  │             │   │             │   │             │
-  │   ML-KEM    │ + │  AES-256    │ + │    LSB      │
-  │   (keys)    │   │  (encrypt)  │   │  (hide)     │
-  │             │   │             │   │             │
-  └─────────────┘   └─────────────┘   └─────────────┘
-        │                 │                 │
-        ▼                 ▼                 ▼
-   quantum-safe      symmetric        invisible
-   key exchange      encryption       embedding
-`}
-			</pre>
+			<Diagram
+				chart={`flowchart LR
+    A[Message] --> B[ML-KEM]
+    B --> C[AES-256]
+    C --> D[LSB Embed]
+    D --> E[Stego Image]
+
+    B -.-> |shared secret| C
+    F[Public Key] -.-> B`}
+			/>
+			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+				Figure 1: Encryption flow — sender encapsulates, encrypts, and embeds
+			</p>
+
+			<p class="text-fg-muted my-8 leading-relaxed">
+				the receiver shares their public key with anyone who wants to send them
+				a message. the stego image can be shared publicly - it looks like
+				any normal image.
+			</p>
+
+			<Diagram
+				chart={`flowchart LR
+    A[Stego Image] --> B[LSB Extract]
+    B --> C[ML-KEM]
+    C --> D[AES-256]
+    D --> E[Message]
+
+    C -.-> |shared secret| D
+    F[Private Key] -.-> C`}
+			/>
+			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+				Figure 2: Decryption flow — receiver extracts, decapsulates, and decrypts
+			</p>
 
 			<p class="text-fg-muted leading-relaxed">
 				even if someone intercepts the image, they see nothing
@@ -72,28 +93,15 @@
 				from both classical and quantum computers.
 			</p>
 
-			<pre class="text-aqua text-sm overflow-x-auto mb-6 leading-relaxed">
-{`
-  ┌────────────────────────────────────────────────┐
-  │                   RECEIVER                     │
-  └────────────────────────────────────────────────┘
-                        │
-                        ▼
-              ┌─────────────────┐
-              │    ML-KEM-768   │
-              │     keygen()    │
-              └─────────────────┘
-                        │
-           ┌────────────┴────────────┐
-           ▼                         ▼
-  ┌─────────────────┐       ┌─────────────────┐
-  │   public key    │       │   private key   │
-  │   (1,184 bytes) │       │   (2,400 bytes) │
-  │                 │       │                 │
-  │   share this    │       │   keep secret   │
-  └─────────────────┘       └─────────────────┘
-`}
-			</pre>
+			<Diagram
+				chart={`flowchart LR
+    A[RECEIVER] --> B[ML-KEM-768 keygen]
+    B --> C[Public Key]
+    B --> D[Private Key]`}
+			/>
+			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+				Figure 3: ML-KEM-768 key pair generation
+			</p>
 
 			<div class="border border-border p-4 bg-bg-card">
 				<p class="text-fg-muted text-sm">
@@ -117,28 +125,15 @@
 
 			<h3 class="text-fg-muted mb-4">step 2.1: key encapsulation</h3>
 
-			<pre class="text-aqua text-sm overflow-x-auto mb-6 leading-relaxed">
-{`
-  ┌─────────────────┐
-  │  receiver's     │
-  │  public key     │
-  └────────┬────────┘
-           │
-           ▼
-  ┌─────────────────┐
-  │    ML-KEM       │
-  │  encapsulate()  │
-  └────────┬────────┘
-           │
-     ┌─────┴─────┐
-     ▼           ▼
-  ┌──────┐   ┌──────────────┐
-  │shared│   │kem ciphertext│
-  │secret│   │ (1,088 bytes)│
-  │(32 B)│   │              │
-  └──────┘   └──────────────┘
-`}
-			</pre>
+			<Diagram
+				chart={`flowchart LR
+    A[Public Key] --> B[ML-KEM encapsulate]
+    B --> C[Shared Secret]
+    B --> D[KEM Ciphertext]`}
+			/>
+			<p class="text-center text-fg-muted/60 text-sm italic -mt-4 mb-8">
+				Figure 4: Key encapsulation produces shared secret and ciphertext
+			</p>
 
 			<p class="text-fg-muted mb-8 leading-relaxed">
 				the shared secret is random and known only to sender and
@@ -147,32 +142,16 @@
 
 			<h3 class="text-fg-muted mb-4">step 2.2: symmetric encryption</h3>
 
-			<pre class="text-aqua text-sm overflow-x-auto mb-6 leading-relaxed">
-{`
-  ┌──────────┐   ┌──────────┐
-  │  shared  │   │   your   │
-  │  secret  │   │  message │
-  └────┬─────┘   └────┬─────┘
-       │              │
-       ▼              │
-  ┌─────────┐         │
-  │  HKDF   │         │
-  │ derive  │         │
-  └────┬────┘         │
-       │              │
-       ▼              ▼
-  ┌─────────────────────┐
-  │     AES-256-GCM     │
-  │      encrypt        │
-  └──────────┬──────────┘
-             │
-             ▼
-  ┌─────────────────────┐
-  │     ciphertext      │
-  │    + auth tag       │
-  └─────────────────────┘
-`}
-			</pre>
+			<Diagram
+				chart={`flowchart LR
+    A[Shared Secret] --> B[HKDF]
+    B --> C[AES-256-GCM]
+    D[Message] --> C
+    C --> E[Ciphertext]`}
+			/>
+			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+				Figure 5: Symmetric encryption using derived AES key
+			</p>
 
 			<div class="border border-border p-4 bg-bg-card mb-8">
 				<p class="text-fg-muted text-sm">
@@ -185,39 +164,16 @@
 
 			<h3 class="text-fg-muted mb-4">step 2.3: steganography</h3>
 
-			<pre class="text-aqua text-sm overflow-x-auto mb-6 leading-relaxed">
-{`
-  ┌──────────────┐   ┌──────────────┐
-  │kem ciphertext│   │  encrypted   │
-  │ (1,088 bytes)│   │   message    │
-  └──────┬───────┘   └──────┬───────┘
-         │                  │
-         └────────┬─────────┘
-                  │
-                  ▼
-         ┌───────────────┐
-         │   serialize   │
-         │   & combine   │
-         └───────┬───────┘
-                 │
-                 ▼
-  ┌────────────────────────────────────┐
-  │         cover image                │
-  │  ┌──┬──┬──┬──┬──┬──┬──┬──┬──┬──┐   │
-  │  │▓▓│░░│▓▓│░░│▓▓│░░│▓▓│░░│▓▓│░░│   │
-  │  └──┴──┴──┴──┴──┴──┴──┴──┴──┴──┘   │
-  │         LSB embedding              │
-  └────────────────┬───────────────────┘
-                   │
-                   ▼
-  ┌────────────────────────────────────┐
-  │         stego image                │
-  │                                    │
-  │     (visually identical)           │
-  │                                    │
-  └────────────────────────────────────┘
-`}
-			</pre>
+			<Diagram
+				chart={`flowchart LR
+    A[KEM Ciphertext] --> C[Combine]
+    B[Ciphertext] --> C
+    C --> D[LSB Embed]
+    D --> E[Stego Image]`}
+			/>
+			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+				Figure 6: LSB steganography embeds data in cover image
+			</p>
 
 			<p class="text-fg-muted leading-relaxed">
 				LSB (Least Significant Bit) steganography modifies the least
@@ -237,47 +193,17 @@
 				private key. the process is reversed:
 			</p>
 
-			<pre class="text-aqua text-sm overflow-x-auto mb-6 leading-relaxed">
-{`
-  ┌────────────────────────────────────┐
-  │           stego image              │
-  └────────────────┬───────────────────┘
-                   │
-                   ▼
-          ┌────────────────┐
-          │  LSB extract   │
-          └────────┬───────┘
-                   │
-         ┌─────────┴─────────┐
-         ▼                   ▼
-  ┌──────────────┐   ┌──────────────┐
-  │kem ciphertext│   │  encrypted   │
-  │              │   │   message    │
-  └──────┬───────┘   └──────┬───────┘
-         │                  │
-         ▼                  │
-  ┌──────────────┐          │
-  │ private key  │          │
-  └──────┬───────┘          │
-         │                  │
-         ▼                  │
-  ┌──────────────┐          │
-  │   ML-KEM     │          │
-  │ decapsulate  │          │
-  └──────┬───────┘          │
-         │                  │
-         ▼                  ▼
-  ┌──────────────┐   ┌──────────────┐
-  │    shared    │──▶│  AES-256-GCM │
-  │    secret    │   │   decrypt    │
-  └──────────────┘   └──────┬───────┘
-                            │
-                            ▼
-                   ┌────────────────┐
-                   │  your message  │
-                   └────────────────┘
-`}
-			</pre>
+			<Diagram
+				chart={`flowchart LR
+    A[Stego Image] --> B[LSB Extract]
+    B --> C[ML-KEM]
+    D[Private Key] -.-> C
+    C --> E[AES-256-GCM]
+    E --> F[Message]`}
+			/>
+			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+				Figure 7: Complete decryption process
+			</p>
 
 			<p class="text-fg-muted leading-relaxed">
 				only the holder of the private key can recover the shared
@@ -331,7 +257,8 @@
 			<h2 class="text-fg mb-4">data sizes</h2>
 			<div class="h-px bg-border mb-6"></div>
 
-			<pre class="text-fg-muted text-sm overflow-x-auto leading-relaxed">
+			<div class="flex justify-center">
+				<pre class="text-fg-muted text-sm overflow-x-auto leading-relaxed">
 {`
   component              size
   ─────────────────────────────────────
@@ -346,7 +273,8 @@
   a 500×500 image can hide ~93 KB
   a 1000×1000 image can hide ~375 KB
 `}
-			</pre>
+				</pre>
+			</div>
 		</section>
 
 		<!-- Footer -->
