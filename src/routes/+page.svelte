@@ -282,8 +282,8 @@
 
 <!-- Toast notification -->
 {#if toastVisible}
-	<div class="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-toast">
-		<div class="px-4 py-2 bg-bg-card border border-border text-fg-muted text-sm">
+	<div class="fixed top-6 left-0 right-0 z-50 flex justify-center pointer-events-none">
+		<div class="px-4 py-2 bg-bg-card border border-border text-fg-muted text-sm animate-toast pointer-events-auto">
 			{toastMessage}
 		</div>
 	</div>
@@ -674,11 +674,11 @@
 	@keyframes toastIn {
 		from {
 			opacity: 0;
-			transform: translate(-50%, -8px);
+			transform: translateY(-8px);
 		}
 		to {
 			opacity: 1;
-			transform: translate(-50%, 0);
+			transform: translateY(0);
 		}
 	}
 </style>
