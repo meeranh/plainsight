@@ -317,6 +317,13 @@
 			<p class="mt-16 text-sm text-fg-muted/50">
 				ml-kem-768 &middot; aes-256-gcm &middot; lsb steganography
 			</p>
+
+			<a
+				href="/how"
+				class="mt-4 inline-block text-sm text-fg-muted/30 hover:text-fg-muted/50 transition-colors duration-100"
+			>
+				how does this work?
+			</a>
 		</div>
 
 	{:else if mode === 'receive'}
