@@ -73,6 +73,9 @@
 		decryptTime: 0
 	});
 
+	// Spooky text flip state
+	let showHiddenText = $state(false);
+
 	onMount(() => {
 		if (hasKeyPair()) {
 			keyPair = loadKeyPair();
@@ -295,7 +298,10 @@
 	{#if mode === 'landing'}
 		<div class="max-w-md text-center animate-in">
 			<div class="flex justify-center mb-8">
-				<StegoAnimation />
+				<StegoAnimation
+					onEyesComplete={() => showHiddenText = true}
+					onEyesFading={() => showHiddenText = false}
+				/>
 			</div>
 
 			<p class="text-fg-muted leading-relaxed">
@@ -325,9 +331,12 @@
 
 			<a
 				href="/how"
-				class="mt-4 inline-block text-sm text-fg-muted/30 hover:text-fg-muted/50 transition-colors duration-100"
+				class="mt-4 inline-block text-sm flip-container"
 			>
-				how does this work?
+				<span class="flip-card" class:flipped={showHiddenText}>
+					<span class="flip-front text-yellow hover:text-yellow/80 transition-colors duration-100">how does this work?</span>
+					<span class="flip-back text-red">some things are hidden in plain sight</span>
+				</span>
 			</a>
 		</div>
 
@@ -697,5 +706,46 @@
 			opacity: 1;
 			transform: translateY(0);
 		}
+	}
+
+	/* Flip animation for spooky text */
+	.flip-container {
+		display: inline-block;
+		perspective: 400px;
+	}
+
+	.flip-card {
+		display: inline-block;
+		position: relative;
+		transform-style: preserve-3d;
+	}
+
+	.flip-front,
+	.flip-back {
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+	}
+
+	.flip-front {
+		display: block;
+		transition: transform 0.6s ease-in-out;
+	}
+
+	.flip-back {
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%) rotateX(180deg);
+		white-space: nowrap;
+		transition: transform 0.6s ease-in-out;
+	}
+
+	.flip-card.flipped .flip-front {
+		transform: rotateX(-180deg);
+	}
+
+	.flip-card.flipped .flip-back {
+		transform: translateX(-50%) rotateX(0deg);
 	}
 </style>

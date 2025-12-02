@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { Image, Eye } from 'lucide-svelte';
 
+	interface Props {
+		onEyesComplete?: () => void;
+		onEyesFading?: () => void;
+	}
+
+	let { onEyesComplete, onEyesFading }: Props = $props();
+
 	const NUM_EYES = 12;
 	const RADIUS = 280; // pixels from center
 
@@ -36,10 +43,16 @@
 				eyeStates = [...eyeStates];
 			}, i * 80)); // 80ms between each eye
 		}
+
+		// After all eyes formed + 1 second, trigger callback
+		timeouts.push(setTimeout(() => {
+			onEyesComplete?.();
+		}, NUM_EYES * 80 + 1000));
 	}
 
 	function handleMouseLeave() {
 		clearAllTimeouts();
+		onEyesFading?.();
 
 		// Wait 1s, then disappear in circular fashion
 		for (let i = 0; i < NUM_EYES; i++) {
