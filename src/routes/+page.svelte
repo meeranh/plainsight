@@ -30,9 +30,12 @@
 
 	// Receiver state
 	let keyPair = $state<KeyPair | null>(null);
-	let showSecretKey = $state(false);
+	let showPrivateKey = $state(false);
+	let privateKeyTimer = $state(0);
+	let privateKeyTimerInterval: ReturnType<typeof setInterval> | null = null;
 	let decryptedMessage = $state('');
 	let decryptError = $state('');
+	let showDecryptStats = $state(false);
 
 	// Sender state
 	let recipientPublicKey = $state('');
@@ -46,6 +49,12 @@
 	let dataSize = $state(0);
 	let processing = $state(false);
 	let processingStep = $state('');
+	let showEncryptStats = $state(false);
+
+	// Toast state
+	let toastMessage = $state('');
+	let toastVisible = $state(false);
+	let toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	// Stats for result display
 	let stats = $state({
@@ -55,12 +64,31 @@
 		pixelsChanged: ''
 	});
 
+	// Decrypt stats
+	let decryptStats = $state({
+		kemBytes: 1088,
+		extractedBytes: 0,
+		decryptTime: 0
+	});
+
 	onMount(() => {
-		// Load existing key pair if available
 		if (hasKeyPair()) {
 			keyPair = loadKeyPair();
 		}
+		return () => {
+			if (privateKeyTimerInterval) clearInterval(privateKeyTimerInterval);
+			if (toastTimeout) clearTimeout(toastTimeout);
+		};
 	});
+
+	function showToast(message: string) {
+		toastMessage = message;
+		toastVisible = true;
+		if (toastTimeout) clearTimeout(toastTimeout);
+		toastTimeout = setTimeout(() => {
+			toastVisible = false;
+		}, 2000);
+	}
 
 	function goBack() {
 		if (mode === 'receive') {
@@ -69,6 +97,7 @@
 				receiveStep = 'init';
 			} else if (receiveStep === 'decrypt' || receiveStep === 'result') {
 				receiveStep = 'keys';
+				showDecryptStats = false;
 			}
 		} else if (mode === 'send') {
 			if (sendStep === 'key') {
@@ -77,11 +106,11 @@
 				sendStep = 'key';
 			} else if (sendStep === 'result') {
 				sendStep = 'compose';
+				showEncryptStats = false;
 			}
 		} else {
 			mode = 'landing';
 		}
-		// Reset errors
 		decryptError = '';
 		sendError = '';
 	}
@@ -98,13 +127,40 @@
 		}
 	}
 
-	async function copyToClipboard(text: string) {
+	async function copyToClipboard(text: string, label: string = 'copied') {
 		await navigator.clipboard.writeText(text);
+		showToast(label);
 	}
 
 	function downloadKey(data: Uint8Array, filename: string) {
 		const blob = new Blob([toBase64(data)], { type: 'text/plain' });
 		downloadBlob(blob, filename);
+	}
+
+	function togglePrivateKey() {
+		if (showPrivateKey) {
+			// Hide immediately
+			showPrivateKey = false;
+			privateKeyTimer = 0;
+			if (privateKeyTimerInterval) {
+				clearInterval(privateKeyTimerInterval);
+				privateKeyTimerInterval = null;
+			}
+		} else {
+			// Show with 5 second timer
+			showPrivateKey = true;
+			privateKeyTimer = 5;
+			privateKeyTimerInterval = setInterval(() => {
+				privateKeyTimer--;
+				if (privateKeyTimer <= 0) {
+					showPrivateKey = false;
+					if (privateKeyTimerInterval) {
+						clearInterval(privateKeyTimerInterval);
+						privateKeyTimerInterval = null;
+					}
+				}
+			}, 1000);
+		}
 	}
 
 	async function handleDecryptImage(event: Event) {
@@ -115,6 +171,7 @@
 		decryptError = '';
 		processing = true;
 		processingStep = 'extracting...';
+		const startTime = performance.now();
 
 		try {
 			const { imageData } = await loadImage(file);
@@ -124,6 +181,14 @@
 
 			processingStep = 'decrypting...';
 			decryptedMessage = await decryptMessage(payload, keyPair.secretKey);
+
+			const endTime = performance.now();
+			decryptStats = {
+				kemBytes: 1088,
+				extractedBytes: extractedData.length,
+				decryptTime: Math.round(endTime - startTime)
+			};
+
 			receiveStep = 'result';
 		} catch (err) {
 			decryptError = err instanceof Error ? err.message : 'failed to decrypt';
@@ -141,11 +206,9 @@
 		coverImage = file;
 		coverImageUrl = URL.createObjectURL(file);
 
-		// Calculate capacity
 		const img = new Image();
 		img.onload = () => {
 			imageCapacity = getCapacity(img.width, img.height);
-			// Estimate data size (rough: 1088 + 12 + 4 + message length * 2)
 			dataSize = 1104 + secretMessage.length * 2;
 		};
 		img.src = coverImageUrl;
@@ -171,7 +234,6 @@
 			stegoBlob = await imageDataToBlob(stegoImageData);
 			stegoImageUrl = URL.createObjectURL(stegoBlob);
 
-			// Calculate stats
 			stats = {
 				kemBytes: 1088,
 				encryptedBytes: payload.ciphertext.length + payload.iv.length,
@@ -203,18 +265,29 @@
 		stegoImageUrl = '';
 		stegoBlob = null;
 		sendError = '';
+		showEncryptStats = false;
 	}
 
 	function resetReceiver() {
 		receiveStep = keyPair ? 'keys' : 'init';
 		decryptedMessage = '';
 		decryptError = '';
+		showDecryptStats = false;
 	}
 </script>
 
 <svelte:head>
 	<title>pq-stego</title>
 </svelte:head>
+
+<!-- Toast notification -->
+{#if toastVisible}
+	<div class="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-toast">
+		<div class="px-4 py-2 bg-bg-card border border-border text-fg-muted text-sm">
+			{toastMessage}
+		</div>
+	</div>
+{/if}
 
 <main class="flex min-h-screen flex-col items-center justify-center px-6 py-12">
 	{#if mode === 'landing'}
@@ -298,7 +371,7 @@
 
 					<div class="flex gap-4 mb-8">
 						<button
-							onclick={() => keyPair && copyToClipboard(toBase64(keyPair.publicKey))}
+							onclick={() => keyPair && copyToClipboard(toBase64(keyPair.publicKey), 'public key copied')}
 							class="px-4 py-2 text-sm text-fg-muted hover:text-aqua transition-colors duration-100"
 						>
 							copy
@@ -312,7 +385,7 @@
 					</div>
 
 					<div class="border-t border-dashed border-border pt-8 mt-8">
-						<h2 class="text-fg mb-2">your secret key</h2>
+						<h2 class="text-fg mb-2">your private key</h2>
 						<div class="h-px bg-border mb-6"></div>
 
 						<p class="text-fg-muted/70 text-sm mb-4">
@@ -320,22 +393,29 @@
 						</p>
 
 						<div class="border border-border p-4 mb-4 break-all text-sm text-fg-muted font-mono bg-bg-card">
-							{#if showSecretKey}
+							{#if showPrivateKey}
 								{keyPair ? toBase64(keyPair.secretKey) : ''}
 							{:else}
 								{'•'.repeat(64)}
 							{/if}
 						</div>
 
-						<div class="flex gap-4 mb-8">
+						<div class="flex gap-4 mb-8 items-center">
 							<button
-								onclick={() => (showSecretKey = !showSecretKey)}
-								class="px-4 py-2 text-sm text-fg-muted hover:text-aqua transition-colors duration-100"
+								onclick={togglePrivateKey}
+								class="px-4 py-2 text-sm text-fg-muted hover:text-aqua transition-colors duration-100 flex items-center gap-2"
 							>
-								{showSecretKey ? 'hide' : 'reveal'}
+								{#if showPrivateKey}
+									hide
+									<span class="inline-flex items-center justify-center w-5 h-5 text-xs border border-border rounded-full text-fg-muted/50">
+										{privateKeyTimer}
+									</span>
+								{:else}
+									reveal
+								{/if}
 							</button>
 							<button
-								onclick={() => keyPair && downloadKey(keyPair.secretKey, 'secret-key.txt')}
+								onclick={() => keyPair && downloadKey(keyPair.secretKey, 'private-key.txt')}
 								class="px-4 py-2 text-sm text-fg-muted hover:text-aqua transition-colors duration-100"
 							>
 								download backup
@@ -380,18 +460,33 @@
 						{decryptedMessage}
 					</div>
 
-					<div class="flex gap-4 mb-8">
+					<div class="flex gap-4 mb-6">
 						<button
-							onclick={() => copyToClipboard(decryptedMessage)}
+							onclick={() => copyToClipboard(decryptedMessage, 'message copied')}
 							class="px-4 py-2 text-sm text-fg-muted hover:text-aqua transition-colors duration-100"
 						>
 							copy
 						</button>
 					</div>
 
-					<p class="text-sm text-green mb-8">
+					<p class="text-sm text-green mb-6">
 						&check; extracted &nbsp; &check; decapsulated &nbsp; &check; decrypted &nbsp; &check; verified
 					</p>
+
+					<button
+						onclick={() => showDecryptStats = !showDecryptStats}
+						class="text-fg-muted/50 hover:text-fg-muted text-sm mb-6 transition-colors duration-100"
+					>
+						{showDecryptStats ? '− hide' : '+ show'} statistics
+					</button>
+
+					{#if showDecryptStats}
+						<div class="text-fg-muted/50 text-sm mb-8 font-mono border border-border p-4 bg-bg-card animate-in">
+							<p>&gt; kem ciphertext &nbsp; {decryptStats.kemBytes} bytes</p>
+							<p>&gt; total extracted &nbsp; {decryptStats.extractedBytes} bytes</p>
+							<p>&gt; decrypt time &nbsp;&nbsp;&nbsp; {decryptStats.decryptTime}ms</p>
+						</div>
+					{/if}
 
 					<button
 						onclick={resetReceiver}
@@ -521,12 +616,21 @@
 						{/if}
 					</div>
 
-					<div class="text-fg-muted/50 text-sm mb-8 font-mono">
-						<p>&gt; encapsulated &nbsp;&nbsp; {stats.kemBytes} bytes</p>
-						<p>&gt; encrypted &nbsp;&nbsp;&nbsp;&nbsp; {stats.encryptedBytes} bytes</p>
-						<p>&gt; embedded &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {stats.totalBytes} bytes</p>
-						<p>&gt; pixels changed &nbsp; {stats.pixelsChanged}%</p>
-					</div>
+					<button
+						onclick={() => showEncryptStats = !showEncryptStats}
+						class="text-fg-muted/50 hover:text-fg-muted text-sm mb-6 transition-colors duration-100"
+					>
+						{showEncryptStats ? '− hide' : '+ show'} statistics
+					</button>
+
+					{#if showEncryptStats}
+						<div class="text-fg-muted/50 text-sm mb-8 font-mono border border-border p-4 bg-bg-card animate-in">
+							<p>&gt; encapsulated &nbsp;&nbsp; {stats.kemBytes} bytes</p>
+							<p>&gt; encrypted &nbsp;&nbsp;&nbsp;&nbsp; {stats.encryptedBytes} bytes</p>
+							<p>&gt; embedded &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {stats.totalBytes} bytes</p>
+							<p>&gt; pixels changed &nbsp; {stats.pixelsChanged}%</p>
+						</div>
+					{/if}
 
 					<button
 						onclick={handleDownloadStego}
@@ -560,6 +664,21 @@
 		to {
 			opacity: 1;
 			transform: translateY(0);
+		}
+	}
+
+	.animate-toast {
+		animation: toastIn 150ms ease-out;
+	}
+
+	@keyframes toastIn {
+		from {
+			opacity: 0;
+			transform: translate(-50%, -8px);
+		}
+		to {
+			opacity: 1;
+			transform: translate(-50%, 0);
 		}
 	}
 </style>
