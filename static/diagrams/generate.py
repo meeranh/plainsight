@@ -55,19 +55,19 @@ def create_encryption_flow():
     """Main encryption pipeline."""
     global counter
     counter = 0
-    svg = f'''<svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg">
-  {box(0, 25, "Message", "aqua", 100, 45)}
-  {arrow(100, 48, 130, 48)}
-  {box(140, 25, "ML-KEM", "green", 90, 45)}
-  {arrow(230, 48, 260, 48)}
-  {box(270, 25, "AES-256", "purple", 90, 45)}
-  {arrow(360, 48, 390, 48)}
-  {box(400, 25, "LSB Embed", "yellow", 100, 45)}
-  {arrow(500, 48, 530, 48)}
-  {box(540, 25, "Stego Image", "orange", 110, 45)}
+    svg = f'''<svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg">
+  {box(0, 35, "Message", "aqua", 100, 45)}
+  {arrow(100, 58, 130, 58)}
+  {box(140, 35, "ML-KEM", "green", 90, 45)}
+  {arrow(230, 58, 260, 58)}
+  {box(270, 35, "AES-256", "purple", 90, 45)}
+  {arrow(360, 58, 390, 58)}
+  {box(400, 35, "LSB Embed", "yellow", 100, 45)}
+  {arrow(500, 58, 530, 58)}
+  {box(540, 35, "Stego Image", "orange", 110, 45)}
 
-  {label(185, 15, "public key")}
-  {arrow(185, 18, 185, 25, dashed=True)}
+  {label(185, 12, "public key")}
+  {arrow(185, 16, 185, 35, dashed=True)}
 </svg>'''
     return svg
 
@@ -76,19 +76,19 @@ def create_decryption_flow():
     """Main decryption pipeline."""
     global counter
     counter = 0
-    svg = f'''<svg viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg">
-  {box(0, 25, "Stego Image", "orange", 110, 45)}
-  {arrow(110, 48, 140, 48)}
-  {box(150, 25, "LSB Extract", "yellow", 100, 45)}
-  {arrow(250, 48, 280, 48)}
-  {box(290, 25, "ML-KEM", "green", 90, 45)}
-  {arrow(380, 48, 410, 48)}
-  {box(420, 25, "AES-256", "purple", 90, 45)}
-  {arrow(510, 48, 540, 48)}
-  {box(550, 25, "Message", "aqua", 100, 45)}
+    svg = f'''<svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg">
+  {box(0, 35, "Stego Image", "orange", 110, 45)}
+  {arrow(110, 58, 140, 58)}
+  {box(150, 35, "LSB Extract", "yellow", 100, 45)}
+  {arrow(250, 58, 280, 58)}
+  {box(290, 35, "ML-KEM", "green", 90, 45)}
+  {arrow(380, 58, 410, 58)}
+  {box(420, 35, "AES-256", "purple", 90, 45)}
+  {arrow(510, 58, 540, 58)}
+  {box(550, 35, "Message", "aqua", 100, 45)}
 
-  {label(335, 15, "private key")}
-  {arrow(335, 18, 335, 25, dashed=True)}
+  {label(335, 12, "private key")}
+  {arrow(335, 16, 335, 35, dashed=True)}
 </svg>'''
     return svg
 
@@ -129,7 +129,7 @@ def create_symmetric_encryption():
     """Symmetric encryption diagram."""
     global counter
     counter = 0
-    svg = f'''<svg viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg">
+    svg = f'''<svg viewBox="0 0 530 120" xmlns="http://www.w3.org/2000/svg">
   {box(0, 0, "Shared Secret", "aqua", 115, 40)}
   {arrow(115, 20, 145, 20)}
   {box(155, 0, "HKDF", "green", 70, 40)}
@@ -149,7 +149,7 @@ def create_steganography():
     """Steganography embedding diagram."""
     global counter
     counter = 0
-    svg = f'''<svg viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg">
+    svg = f'''<svg viewBox="0 0 550 120" xmlns="http://www.w3.org/2000/svg">
   {box(0, 0, "KEM Ciphertext", "purple", 120, 40)}
   {arrow(120, 20, 160, 50)}
 
@@ -169,19 +169,19 @@ def create_full_decryption():
     """Complete decryption process."""
     global counter
     counter = 0
-    svg = f'''<svg viewBox="0 0 600 100" xmlns="http://www.w3.org/2000/svg">
-  {box(0, 27, "Stego Image", "orange", 105, 45)}
-  {arrow(105, 50, 130, 50)}
-  {box(140, 27, "LSB Extract", "yellow", 95, 45)}
-  {arrow(235, 50, 260, 50)}
-  {box(270, 27, "ML-KEM", "green", 85, 45)}
-  {arrow(355, 50, 380, 50)}
-  {box(390, 27, "AES-256-GCM", "purple", 105, 45)}
-  {arrow(495, 50, 520, 50)}
-  {box(530, 27, "Message", "aqua", 85, 45)}
+    svg = f'''<svg viewBox="0 0 625 110" xmlns="http://www.w3.org/2000/svg">
+  {box(0, 37, "Stego Image", "orange", 105, 45)}
+  {arrow(105, 60, 130, 60)}
+  {box(140, 37, "LSB Extract", "yellow", 95, 45)}
+  {arrow(235, 60, 260, 60)}
+  {box(270, 37, "ML-KEM", "green", 85, 45)}
+  {arrow(355, 60, 380, 60)}
+  {box(390, 37, "AES-256-GCM", "purple", 105, 45)}
+  {arrow(495, 60, 520, 60)}
+  {box(530, 37, "Message", "aqua", 85, 45)}
 
-  {label(312, 15, "private key")}
-  {arrow(312, 18, 312, 27, dashed=True)}
+  {label(312, 12, "private key")}
+  {arrow(312, 16, 312, 37, dashed=True)}
 </svg>'''
     return svg
 
