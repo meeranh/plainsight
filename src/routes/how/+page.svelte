@@ -30,11 +30,10 @@
 
 			<h3 class="text-fg-muted mb-3">what is steganography?</h3>
 			<p class="text-fg-muted mb-8 leading-relaxed">
-				steganography is the art of hiding messages in plain sight.
-				unlike encryption (which scrambles a message so it can't be
-				read), steganography hides the message inside something
-				ordinary — like an image. anyone looking at the image sees
-				just a normal picture.
+				steganography hides messages in plain sight. unlike encryption
+				which scrambles a message so it can't be read, steganography
+				hides the message inside something ordinary like an image.
+				anyone looking at the image sees just a normal picture.
 			</p>
 
 			<h3 class="text-fg-muted mb-3">what is post-quantum encryption?</h3>
@@ -47,12 +46,12 @@
 			</p>
 
 			<h3 class="text-fg-muted mb-3">what is LSB encoding?</h3>
-			<p class="text-fg-muted mb-8 leading-relaxed">
+		<p class="text-fg-muted mb-8 leading-relaxed">
 				every pixel in an image has color values stored as 8-bit
 				numbers (0-255). the least significant bit (LSB) is the
-				rightmost bit — changing it only shifts the value by 1.
+				rightmost bit, and changing it only shifts the value by 1.
 				for example, changing a red value from 180 to 181 is
-				completely invisible to the human eye.
+				invisible to the human eye.
 			</p>
 
 			<div class="flex justify-center">
@@ -62,10 +61,10 @@
 				lsb embedding example
 			</p>
 
-			<p class="text-fg-muted my-8 leading-relaxed">
+		<p class="text-fg-muted my-8 leading-relaxed">
 				each pixel has three color channels (red, green, blue), so
 				each pixel can hide 3 bits of data. a 1000×1000 image has
-				1 million pixels — that's 375 KB of hiding capacity.
+				1 million pixels, giving you 375 KB of hiding capacity.
 			</p>
 
 			<p class="text-fg-muted leading-relaxed">
@@ -81,11 +80,11 @@
 			<h2 class="text-fg mb-4">the big picture</h2>
 			<div class="h-px bg-border mb-6"></div>
 
-			<p class="text-fg-muted mb-8 leading-relaxed">
+		<p class="text-fg-muted mb-8 leading-relaxed">
 				plainsight combines these ideas: your message is encrypted
 				with ML-KEM-768 and AES-256-GCM, then hidden inside an image
-				using LSB encoding. the image can be shared anywhere —
-				social media, email, messaging apps — without raising suspicion.
+				using LSB encoding. the image can be shared on social media,
+				email, or messaging apps without raising suspicion.
 			</p>
 
 			<div class="flex justify-center">
@@ -95,10 +94,10 @@
 				encryption pipeline
 			</p>
 
-			<p class="text-fg-muted my-8 leading-relaxed">
+		<p class="text-fg-muted my-8 leading-relaxed">
 				the receiver extracts and decrypts the message using their
-				private key. if anyone tampers with the image, the decryption
-				fails automatically — the system detects modifications.
+				private key. if anyone tampers with the image, decryption
+				fails and the system detects the modification.
 			</p>
 
 			<div class="flex justify-center">
@@ -196,17 +195,18 @@
 			<h2 class="text-fg mb-4">performance</h2>
 			<div class="h-px bg-border mb-6"></div>
 
-			<p class="text-fg-muted mb-8 leading-relaxed">
+		<p class="text-fg-muted mb-8 leading-relaxed">
 				post-quantum cryptography has a reputation for being slow, but
-				ML-KEM is remarkably fast. all operations complete in under
-				100 microseconds — fast enough for real-time use.
+				ML-KEM is fast. all operations complete in under 100 microseconds.
+				these benchmarks were measured using a
+				<a href="https://github.com/meeranh/plainsight-benchmarks" target="_blank" class="text-fg underline hover:text-fg-muted">rust implementation</a>.
 			</p>
 
 			<div class="flex justify-center">
 				<img src="/diagrams/mlkem_chart.svg" alt="ml-kem performance" class="w-full max-w-md" />
 			</div>
-			<p class="text-center text-fg-muted/50 text-sm italic mt-2">
-				ml-kem operation times across variants
+		<p class="text-center text-fg-muted/50 text-sm italic mt-2">
+				ml-kem operation times across variants (lower is better)
 			</p>
 
 			<div class="flex justify-center mt-8">
@@ -234,8 +234,8 @@
 			<h2 class="text-fg mb-4">image quality</h2>
 			<div class="h-px bg-border mb-6"></div>
 
-			<p class="text-fg-muted mb-8 leading-relaxed">
-				PSNR (peak signal-to-noise ratio) measures image quality —
+		<p class="text-fg-muted mb-8 leading-relaxed">
+				PSNR (peak signal-to-noise ratio) measures image quality.
 				values above 40 dB are considered imperceptible to humans.
 				even at 100% capacity, PSNR stays above 51 dB. in practice,
 				a typical message uses less than 1% of capacity.
@@ -244,8 +244,8 @@
 			<div class="flex justify-center">
 				<img src="/diagrams/psnr_chart.svg" alt="psnr chart" class="w-full max-w-sm" />
 			</div>
-			<p class="text-center text-fg-muted/50 text-sm italic mt-2">
-				psnr vs embedding capacity
+		<p class="text-center text-fg-muted/50 text-sm italic mt-2">
+				psnr vs embedding capacity (higher is better)
 			</p>
 		</section>
 
