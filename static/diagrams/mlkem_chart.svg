@@ -1,0 +1,53 @@
+<svg viewBox="0 0 450 280" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="225" y="20" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="14">ML-KEM Performance Comparison</text>
+
+  <!-- Y axis -->
+  <line x1="50" y1="40" x2="50" y2="240" stroke="#ebdbb2" stroke-width="1" opacity="0.5"/>
+  <text x="25" y="145" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="10" transform="rotate(-90, 25, 145)">Time (μs)</text>
+
+  <!-- Y axis labels -->
+  <text x="45" y="244" fill="#ebdbb2" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">0</text>
+  <text x="45" y="194" fill="#ebdbb2" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">20</text>
+  <text x="45" y="144" fill="#ebdbb2" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">40</text>
+  <text x="45" y="94" fill="#ebdbb2" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">60</text>
+  <text x="45" y="44" fill="#ebdbb2" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">80</text>
+
+  <!-- Grid lines -->
+  <line x1="50" y1="190" x2="420" y2="190" stroke="#ebdbb2" stroke-width="0.5" opacity="0.2"/>
+  <line x1="50" y1="140" x2="420" y2="140" stroke="#ebdbb2" stroke-width="0.5" opacity="0.2"/>
+  <line x1="50" y1="90" x2="420" y2="90" stroke="#ebdbb2" stroke-width="0.5" opacity="0.2"/>
+
+  <!-- X axis -->
+  <line x1="50" y1="240" x2="420" y2="240" stroke="#ebdbb2" stroke-width="1" opacity="0.5"/>
+  <rect x="100" y="177.5" width="25" height="62.5" fill="#8ec07c" opacity="0.9"/>
+  <text x="112.5" y="172.5" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="8">25</text>
+  <rect x="130" y="180.0" width="25" height="60.0" fill="#b8bb26" opacity="0.9"/>
+  <text x="142.5" y="175.0" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="8">24</text>
+  <rect x="160" y="160.0" width="25" height="80.0" fill="#d3869b" opacity="0.9"/>
+  <text x="172.5" y="155.0" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="8">32</text>
+  <text x="145" y="255" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="10">ML-KEM-512</text>
+  <rect x="210" y="132.5" width="25" height="107.5" fill="#8ec07c" opacity="0.9"/>
+  <text x="222.5" y="127.5" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="8">43</text>
+  <rect x="240" y="140.0" width="25" height="100.0" fill="#b8bb26" opacity="0.9"/>
+  <text x="252.5" y="135.0" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="8">40</text>
+  <rect x="270" y="110.0" width="25" height="130.0" fill="#d3869b" opacity="0.9"/>
+  <text x="282.5" y="105.0" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="8">52</text>
+  <text x="255" y="255" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="10">ML-KEM-768</text>
+  <rect x="320" y="67.5" width="25" height="172.5" fill="#8ec07c" opacity="0.9"/>
+  <text x="332.5" y="62.5" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="8">69</text>
+  <rect x="350" y="80.0" width="25" height="160.0" fill="#b8bb26" opacity="0.9"/>
+  <text x="362.5" y="75.0" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="8">64</text>
+  <rect x="380" y="47.5" width="25" height="192.5" fill="#d3869b" opacity="0.9"/>
+  <text x="392.5" y="42.5" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="8">77</text>
+  <text x="365" y="255" fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="10">ML-KEM-1024</text>
+
+  <rect x="120" y="265" width="12" height="12" fill="#8ec07c" opacity="0.9"/>
+  <text x="137" y="275" fill="#ebdbb2" font-family="monospace" font-size="9">KeyGen</text>
+
+  <rect x="195" y="265" width="12" height="12" fill="#b8bb26" opacity="0.9"/>
+  <text x="212" y="275" fill="#ebdbb2" font-family="monospace" font-size="9">Encap</text>
+
+  <rect x="265" y="265" width="12" height="12" fill="#d3869b" opacity="0.9"/>
+  <text x="282" y="275" fill="#ebdbb2" font-family="monospace" font-size="9">Decap</text>
+</svg>

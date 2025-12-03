@@ -55,19 +55,19 @@ def create_encryption_flow():
     """Main encryption pipeline."""
     global counter
     counter = 0
-    svg = f'''<svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg">
-  {box(0, 35, "Message", "aqua", 100, 45)}
-  {arrow(100, 58, 130, 58)}
-  {box(140, 35, "ML-KEM", "green", 90, 45)}
-  {arrow(230, 58, 260, 58)}
-  {box(270, 35, "AES-256", "purple", 90, 45)}
-  {arrow(360, 58, 390, 58)}
-  {box(400, 35, "LSB Embed", "yellow", 100, 45)}
-  {arrow(500, 58, 530, 58)}
-  {box(540, 35, "Stego Image", "orange", 110, 45)}
+    svg = f'''<svg viewBox="0 0 660 120" xmlns="http://www.w3.org/2000/svg">
+  {box(0, 50, "Message", "aqua", 100, 45)}
+  {arrow(100, 73, 130, 73)}
+  {box(140, 50, "ML-KEM", "green", 90, 45)}
+  {arrow(230, 73, 260, 73)}
+  {box(270, 50, "AES-256", "purple", 90, 45)}
+  {arrow(360, 73, 390, 73)}
+  {box(400, 50, "LSB Embed", "yellow", 100, 45)}
+  {arrow(500, 73, 530, 73)}
+  {box(540, 50, "Stego Image", "orange", 110, 45)}
 
   {label(185, 12, "public key")}
-  {arrow(185, 16, 185, 35, dashed=True)}
+  {arrow(185, 18, 185, 50, dashed=True)}
 </svg>'''
     return svg
 
@@ -76,19 +76,19 @@ def create_decryption_flow():
     """Main decryption pipeline."""
     global counter
     counter = 0
-    svg = f'''<svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg">
-  {box(0, 35, "Stego Image", "orange", 110, 45)}
-  {arrow(110, 58, 140, 58)}
-  {box(150, 35, "LSB Extract", "yellow", 100, 45)}
-  {arrow(250, 58, 280, 58)}
-  {box(290, 35, "ML-KEM", "green", 90, 45)}
-  {arrow(380, 58, 410, 58)}
-  {box(420, 35, "AES-256", "purple", 90, 45)}
-  {arrow(510, 58, 540, 58)}
-  {box(550, 35, "Message", "aqua", 100, 45)}
+    svg = f'''<svg viewBox="0 0 660 120" xmlns="http://www.w3.org/2000/svg">
+  {box(0, 50, "Stego Image", "orange", 110, 45)}
+  {arrow(110, 73, 140, 73)}
+  {box(150, 50, "LSB Extract", "yellow", 100, 45)}
+  {arrow(250, 73, 280, 73)}
+  {box(290, 50, "ML-KEM", "green", 90, 45)}
+  {arrow(380, 73, 410, 73)}
+  {box(420, 50, "AES-256", "purple", 90, 45)}
+  {arrow(510, 73, 540, 73)}
+  {box(550, 50, "Message", "aqua", 100, 45)}
 
   {label(335, 12, "private key")}
-  {arrow(335, 16, 335, 35, dashed=True)}
+  {arrow(335, 18, 335, 50, dashed=True)}
 </svg>'''
     return svg
 
@@ -169,20 +169,170 @@ def create_full_decryption():
     """Complete decryption process."""
     global counter
     counter = 0
-    svg = f'''<svg viewBox="0 0 625 110" xmlns="http://www.w3.org/2000/svg">
-  {box(0, 37, "Stego Image", "orange", 105, 45)}
-  {arrow(105, 60, 130, 60)}
-  {box(140, 37, "LSB Extract", "yellow", 95, 45)}
-  {arrow(235, 60, 260, 60)}
-  {box(270, 37, "ML-KEM", "green", 85, 45)}
-  {arrow(355, 60, 380, 60)}
-  {box(390, 37, "AES-256-GCM", "purple", 105, 45)}
-  {arrow(495, 60, 520, 60)}
-  {box(530, 37, "Message", "aqua", 85, 45)}
+    svg = f'''<svg viewBox="0 0 625 120" xmlns="http://www.w3.org/2000/svg">
+  {box(0, 50, "Stego Image", "orange", 105, 45)}
+  {arrow(105, 73, 130, 73)}
+  {box(140, 50, "LSB Extract", "yellow", 95, 45)}
+  {arrow(235, 73, 260, 73)}
+  {box(270, 50, "ML-KEM", "green", 85, 45)}
+  {arrow(355, 73, 380, 73)}
+  {box(390, 50, "AES-256-GCM", "purple", 105, 45)}
+  {arrow(495, 73, 520, 73)}
+  {box(530, 50, "Message", "aqua", 85, 45)}
 
   {label(312, 12, "private key")}
-  {arrow(312, 16, 312, 37, dashed=True)}
+  {arrow(312, 18, 312, 50, dashed=True)}
 </svg>'''
+    return svg
+
+
+def create_mlkem_chart():
+    """ML-KEM performance bar chart."""
+    # Data: KeyGen, Encap, Decap for 512, 768, 1024
+    data = {
+        '512': (25, 24, 32),
+        '768': (43, 40, 52),
+        '1024': (69, 64, 77),
+    }
+
+    chart_width = 400
+    chart_height = 200
+    bar_width = 25
+    group_gap = 60
+    max_val = 80
+
+    svg = f'''<svg viewBox="0 0 450 280" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="225" y="20" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="14">ML-KEM Performance Comparison</text>
+
+  <!-- Y axis -->
+  <line x1="50" y1="40" x2="50" y2="240" stroke="{COLORS['fg']}" stroke-width="1" opacity="0.5"/>
+  <text x="25" y="145" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="10" transform="rotate(-90, 25, 145)">Time (μs)</text>
+
+  <!-- Y axis labels -->
+  <text x="45" y="244" fill="{COLORS['fg']}" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">0</text>
+  <text x="45" y="194" fill="{COLORS['fg']}" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">20</text>
+  <text x="45" y="144" fill="{COLORS['fg']}" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">40</text>
+  <text x="45" y="94" fill="{COLORS['fg']}" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">60</text>
+  <text x="45" y="44" fill="{COLORS['fg']}" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">80</text>
+
+  <!-- Grid lines -->
+  <line x1="50" y1="190" x2="420" y2="190" stroke="{COLORS['fg']}" stroke-width="0.5" opacity="0.2"/>
+  <line x1="50" y1="140" x2="420" y2="140" stroke="{COLORS['fg']}" stroke-width="0.5" opacity="0.2"/>
+  <line x1="50" y1="90" x2="420" y2="90" stroke="{COLORS['fg']}" stroke-width="0.5" opacity="0.2"/>
+
+  <!-- X axis -->
+  <line x1="50" y1="240" x2="420" y2="240" stroke="{COLORS['fg']}" stroke-width="1" opacity="0.5"/>
+'''
+
+    x_positions = [100, 210, 320]
+    variants = ['512', '768', '1024']
+    colors = [COLORS['aqua'], COLORS['green'], COLORS['purple']]
+
+    for i, (variant, x_base) in enumerate(zip(variants, x_positions)):
+        keygen, encap, decap = data[variant]
+
+        # Calculate bar heights (scale to chart)
+        h_keygen = (keygen / max_val) * 200
+        h_encap = (encap / max_val) * 200
+        h_decap = (decap / max_val) * 200
+
+        # KeyGen bar
+        svg += f'''  <rect x="{x_base}" y="{240 - h_keygen}" width="{bar_width}" height="{h_keygen}" fill="{COLORS['aqua']}" opacity="0.9"/>
+  <text x="{x_base + bar_width/2}" y="{235 - h_keygen}" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="8">{keygen}</text>
+'''
+        # Encap bar
+        svg += f'''  <rect x="{x_base + 30}" y="{240 - h_encap}" width="{bar_width}" height="{h_encap}" fill="{COLORS['green']}" opacity="0.9"/>
+  <text x="{x_base + 30 + bar_width/2}" y="{235 - h_encap}" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="8">{encap}</text>
+'''
+        # Decap bar
+        svg += f'''  <rect x="{x_base + 60}" y="{240 - h_decap}" width="{bar_width}" height="{h_decap}" fill="{COLORS['purple']}" opacity="0.9"/>
+  <text x="{x_base + 60 + bar_width/2}" y="{235 - h_decap}" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="8">{decap}</text>
+'''
+        # X label
+        svg += f'''  <text x="{x_base + 45}" y="255" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="10">ML-KEM-{variant}</text>
+'''
+
+    # Legend
+    svg += f'''
+  <rect x="120" y="265" width="12" height="12" fill="{COLORS['aqua']}" opacity="0.9"/>
+  <text x="137" y="275" fill="{COLORS['fg']}" font-family="monospace" font-size="9">KeyGen</text>
+
+  <rect x="195" y="265" width="12" height="12" fill="{COLORS['green']}" opacity="0.9"/>
+  <text x="212" y="275" fill="{COLORS['fg']}" font-family="monospace" font-size="9">Encap</text>
+
+  <rect x="265" y="265" width="12" height="12" fill="{COLORS['purple']}" opacity="0.9"/>
+  <text x="282" y="275" fill="{COLORS['fg']}" font-family="monospace" font-size="9">Decap</text>
+</svg>'''
+    return svg
+
+
+def create_psnr_chart():
+    """PSNR vs embedding rate chart."""
+    # Data points: (capacity%, psnr)
+    data = [(10, 61), (25, 57), (50, 54), (75, 52), (100, 51)]
+
+    svg = f'''<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="200" y="20" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="14">Image Quality vs Embedding Rate</text>
+
+  <!-- Y axis -->
+  <line x1="50" y1="40" x2="50" y2="200" stroke="{COLORS['fg']}" stroke-width="1" opacity="0.5"/>
+  <text x="20" y="125" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="10" transform="rotate(-90, 20, 125)">PSNR (dB)</text>
+
+  <!-- Y axis labels -->
+  <text x="45" y="204" fill="{COLORS['fg']}" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">40</text>
+  <text x="45" y="164" fill="{COLORS['fg']}" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">50</text>
+  <text x="45" y="124" fill="{COLORS['fg']}" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">60</text>
+  <text x="45" y="84" fill="{COLORS['fg']}" text-anchor="end" font-family="monospace" font-size="9" opacity="0.7">70</text>
+
+  <!-- X axis -->
+  <line x1="50" y1="200" x2="370" y2="200" stroke="{COLORS['fg']}" stroke-width="1" opacity="0.5"/>
+  <text x="210" y="235" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="10">Embedding Capacity (%)</text>
+
+  <!-- X axis labels -->
+  <text x="82" y="215" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="9" opacity="0.7">10</text>
+  <text x="130" y="215" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="9" opacity="0.7">25</text>
+  <text x="210" y="215" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="9" opacity="0.7">50</text>
+  <text x="290" y="215" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="9" opacity="0.7">75</text>
+  <text x="370" y="215" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="9" opacity="0.7">100</text>
+
+  <!-- Threshold line at 40dB -->
+  <line x1="50" y1="200" x2="370" y2="200" stroke="{COLORS['orange']}" stroke-width="1" stroke-dasharray="5,5" opacity="0.7"/>
+  <text x="375" y="204" fill="{COLORS['orange']}" font-family="monospace" font-size="8" opacity="0.7">40dB</text>
+
+  <!-- Grid lines -->
+  <line x1="50" y1="160" x2="370" y2="160" stroke="{COLORS['fg']}" stroke-width="0.5" opacity="0.2"/>
+  <line x1="50" y1="120" x2="370" y2="120" stroke="{COLORS['fg']}" stroke-width="0.5" opacity="0.2"/>
+  <line x1="50" y1="80" x2="370" y2="80" stroke="{COLORS['fg']}" stroke-width="0.5" opacity="0.2"/>
+'''
+
+    # Calculate points
+    def x_pos(cap):
+        return 50 + (cap / 100) * 320
+
+    def y_pos(psnr):
+        # Scale: 40dB = 200, 70dB = 80
+        return 200 - ((psnr - 40) / 30) * 120
+
+    # Draw line connecting points
+    points = [(x_pos(cap), y_pos(psnr)) for cap, psnr in data]
+    path = f"M {points[0][0]} {points[0][1]}"
+    for x, y in points[1:]:
+        path += f" L {x} {y}"
+
+    svg += f'''  <path d="{path}" fill="none" stroke="{COLORS['aqua']}" stroke-width="2"/>
+'''
+
+    # Draw points
+    for cap, psnr in data:
+        x = x_pos(cap)
+        y = y_pos(psnr)
+        svg += f'''  <circle cx="{x}" cy="{y}" r="5" fill="{COLORS['aqua']}"/>
+  <text x="{x}" y="{y - 10}" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="9">{psnr}</text>
+'''
+
+    svg += '''</svg>'''
     return svg
 
 
@@ -195,6 +345,8 @@ def main():
         'symmetric_encryption.svg': create_symmetric_encryption(),
         'steganography.svg': create_steganography(),
         'full_decryption.svg': create_full_decryption(),
+        'mlkem_chart.svg': create_mlkem_chart(),
+        'psnr_chart.svg': create_psnr_chart(),
     }
 
     for name, svg in diagrams.items():

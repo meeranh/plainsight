@@ -252,6 +252,10 @@
 				benchmarks were run in rust with 25,000 iterations.
 			</p>
 
+			<div class="flex justify-center my-8">
+				<img src="/diagrams/mlkem_chart.svg" alt="ML-KEM Performance" class="w-full max-w-md" />
+			</div>
+
 			<div class="flex justify-center">
 				<pre class="text-fg-muted text-sm overflow-x-auto leading-relaxed">
 {`
@@ -273,6 +277,30 @@
 			<p class="text-fg-muted mt-6 text-sm opacity-70">
 				benchmarks: AMD Ryzen 5 7535HS, rustc 1.90.0, Arch Linux
 			</p>
+		</section>
+
+		<!-- Image Quality -->
+		<section>
+			<h2 class="text-fg mb-4">image quality</h2>
+			<div class="h-px bg-border mb-6"></div>
+
+			<p class="text-fg-muted mb-6 leading-relaxed">
+				LSB steganography introduces minimal distortion. even at 100%
+				capacity, PSNR remains above 51 dB — well above the 40 dB
+				threshold where changes become visible to humans.
+			</p>
+
+			<div class="flex justify-center my-8">
+				<img src="/diagrams/psnr_chart.svg" alt="PSNR vs Embedding Rate" class="w-full max-w-sm" />
+			</div>
+
+			<div class="border border-border p-4 bg-bg-card">
+				<p class="text-fg-muted text-sm">
+					<span class="text-yellow">typical usage:</span> a 1000-character
+					message in a 1024×768 image uses only ~0.7% capacity, resulting
+					in PSNR well above 60 dB. the modifications are completely invisible.
+				</p>
+			</div>
 		</section>
 
 		<!-- Footer -->
