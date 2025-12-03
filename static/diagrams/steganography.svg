@@ -1,0 +1,70 @@
+<svg viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <rect x="0" y="0" width="120" height="40" rx="8" ry="8"
+          fill="#3c3836" stroke="#d3869b" stroke-width="2"/>
+    <text x="60.0" y="25.0"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">KEM Ciphertext</text>
+  </g>
+  <g>
+    <defs>
+      <marker id="arrow1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#fabd2f"/>
+      </marker>
+    </defs>
+    <line x1="120" y1="20" x2="160" y2="50"
+          stroke="#fabd2f" stroke-width="2"  marker-end="url(#arrow1)"/>
+  </g>
+
+  <g>
+    <rect x="0" y="75" width="100" height="40" rx="8" ry="8"
+          fill="#3c3836" stroke="#fe8019" stroke-width="2"/>
+    <text x="50.0" y="100.0"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">Ciphertext</text>
+  </g>
+  <g>
+    <defs>
+      <marker id="arrow2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#fabd2f"/>
+      </marker>
+    </defs>
+    <line x1="100" y1="95" x2="160" y2="65"
+          stroke="#fabd2f" stroke-width="2"  marker-end="url(#arrow2)"/>
+  </g>
+
+  <g>
+    <rect x="170" y="40" width="85" height="40" rx="8" ry="8"
+          fill="#3c3836" stroke="#b8bb26" stroke-width="2"/>
+    <text x="212.5" y="65.0"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">Combine</text>
+  </g>
+  <g>
+    <defs>
+      <marker id="arrow3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#fabd2f"/>
+      </marker>
+    </defs>
+    <line x1="255" y1="60" x2="285" y2="60"
+          stroke="#fabd2f" stroke-width="2"  marker-end="url(#arrow3)"/>
+  </g>
+  <g>
+    <rect x="295" y="40" width="100" height="40" rx="8" ry="8"
+          fill="#3c3836" stroke="#fabd2f" stroke-width="2"/>
+    <text x="345.0" y="65.0"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">LSB Embed</text>
+  </g>
+  <g>
+    <defs>
+      <marker id="arrow4" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#fabd2f"/>
+      </marker>
+    </defs>
+    <line x1="395" y1="60" x2="425" y2="60"
+          stroke="#fabd2f" stroke-width="2"  marker-end="url(#arrow4)"/>
+  </g>
+  <g>
+    <rect x="435" y="40" width="105" height="40" rx="8" ry="8"
+          fill="#3c3836" stroke="#8ec07c" stroke-width="2"/>
+    <text x="487.5" y="65.0"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">Stego Image</text>
+  </g>
+</svg>

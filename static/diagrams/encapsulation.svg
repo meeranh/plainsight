@@ -1,0 +1,53 @@
+<svg viewBox="0 0 500 100" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <rect x="0" y="27" width="110" height="45" rx="8" ry="8"
+          fill="#3c3836" stroke="#fabd2f" stroke-width="2"/>
+    <text x="55.0" y="54.5"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">Public Key</text>
+  </g>
+  <g>
+    <defs>
+      <marker id="arrow1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#fabd2f"/>
+      </marker>
+    </defs>
+    <line x1="110" y1="50" x2="140" y2="50"
+          stroke="#fabd2f" stroke-width="2"  marker-end="url(#arrow1)"/>
+  </g>
+  <g>
+    <rect x="150" y="27" width="125" height="45" rx="8" ry="8"
+          fill="#3c3836" stroke="#b8bb26" stroke-width="2"/>
+    <text x="212.5" y="54.5"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">ML-KEM encap</text>
+  </g>
+  <g>
+    <defs>
+      <marker id="arrow2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#fabd2f"/>
+      </marker>
+    </defs>
+    <line x1="275" y1="40" x2="320" y2="18"
+          stroke="#fabd2f" stroke-width="2"  marker-end="url(#arrow2)"/>
+  </g>
+  <g>
+    <defs>
+      <marker id="arrow3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#fabd2f"/>
+      </marker>
+    </defs>
+    <line x1="275" y1="60" x2="320" y2="82"
+          stroke="#fabd2f" stroke-width="2"  marker-end="url(#arrow3)"/>
+  </g>
+  <g>
+    <rect x="330" y="0" width="120" height="36" rx="8" ry="8"
+          fill="#3c3836" stroke="#8ec07c" stroke-width="2"/>
+    <text x="390.0" y="23.0"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">Shared Secret</text>
+  </g>
+  <g>
+    <rect x="330" y="62" width="120" height="36" rx="8" ry="8"
+          fill="#3c3836" stroke="#d3869b" stroke-width="2"/>
+    <text x="390.0" y="85.0"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">KEM Ciphertext</text>
+  </g>
+</svg>

@@ -1,0 +1,53 @@
+<svg viewBox="0 0 480 100" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <rect x="0" y="27" width="100" height="45" rx="8" ry="8"
+          fill="#3c3836" stroke="#8ec07c" stroke-width="2"/>
+    <text x="50.0" y="54.5"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">RECEIVER</text>
+  </g>
+  <g>
+    <defs>
+      <marker id="arrow1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#fabd2f"/>
+      </marker>
+    </defs>
+    <line x1="100" y1="50" x2="130" y2="50"
+          stroke="#fabd2f" stroke-width="2"  marker-end="url(#arrow1)"/>
+  </g>
+  <g>
+    <rect x="140" y="27" width="130" height="45" rx="8" ry="8"
+          fill="#3c3836" stroke="#b8bb26" stroke-width="2"/>
+    <text x="205.0" y="54.5"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">ML-KEM keygen</text>
+  </g>
+  <g>
+    <defs>
+      <marker id="arrow2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#fabd2f"/>
+      </marker>
+    </defs>
+    <line x1="270" y1="40" x2="320" y2="20"
+          stroke="#fabd2f" stroke-width="2"  marker-end="url(#arrow2)"/>
+  </g>
+  <g>
+    <defs>
+      <marker id="arrow3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill="#fabd2f"/>
+      </marker>
+    </defs>
+    <line x1="270" y1="60" x2="320" y2="80"
+          stroke="#fabd2f" stroke-width="2"  marker-end="url(#arrow3)"/>
+  </g>
+  <g>
+    <rect x="330" y="0" width="110" height="40" rx="8" ry="8"
+          fill="#3c3836" stroke="#fabd2f" stroke-width="2"/>
+    <text x="385.0" y="25.0"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">Public Key</text>
+  </g>
+  <g>
+    <rect x="330" y="60" width="110" height="40" rx="8" ry="8"
+          fill="#3c3836" stroke="#d3869b" stroke-width="2"/>
+    <text x="385.0" y="85.0"
+          fill="#ebdbb2" text-anchor="middle" font-family="monospace" font-size="13">Private Key</text>
+  </g>
+</svg>

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import Diagram from '$lib/components/Diagram.svelte';
-
 	function goBack() {
 		history.back();
 	}
@@ -40,17 +38,10 @@
 				your message is both encrypted and hidden:
 			</p>
 
-			<Diagram
-				chart={`flowchart LR
-    A[Message] --> B[ML-KEM]
-    B --> C[AES-256]
-    C --> D[LSB Embed]
-    D --> E[Stego Image]
-
-    B -.-> |shared secret| C
-    F[Public Key] -.-> B`}
-			/>
-			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+			<div class="flex justify-center my-8">
+				<img src="/diagrams/encryption_flow.svg" alt="Encryption flow" class="w-full max-w-xl" />
+			</div>
+			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
 				Figure 1: Encryption flow — sender encapsulates, encrypts, and embeds
 			</p>
 
@@ -60,17 +51,10 @@
 				any normal image.
 			</p>
 
-			<Diagram
-				chart={`flowchart LR
-    A[Stego Image] --> B[LSB Extract]
-    B --> C[ML-KEM]
-    C --> D[AES-256]
-    D --> E[Message]
-
-    C -.-> |shared secret| D
-    F[Private Key] -.-> C`}
-			/>
-			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+			<div class="flex justify-center my-8">
+				<img src="/diagrams/decryption_flow.svg" alt="Decryption flow" class="w-full max-w-xl" />
+			</div>
+			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
 				Figure 2: Decryption flow — receiver extracts, decapsulates, and decrypts
 			</p>
 
@@ -93,13 +77,10 @@
 				from both classical and quantum computers.
 			</p>
 
-			<Diagram
-				chart={`flowchart LR
-    A[RECEIVER] --> B[ML-KEM-768 keygen]
-    B --> C[Public Key]
-    B --> D[Private Key]`}
-			/>
-			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+			<div class="flex justify-center my-8">
+				<img src="/diagrams/keygen.svg" alt="Key generation" class="w-full max-w-md" />
+			</div>
+			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
 				Figure 3: ML-KEM-768 key pair generation
 			</p>
 
@@ -125,13 +106,10 @@
 
 			<h3 class="text-fg-muted mb-4">step 2.1: key encapsulation</h3>
 
-			<Diagram
-				chart={`flowchart LR
-    A[Public Key] --> B[ML-KEM encapsulate]
-    B --> C[Shared Secret]
-    B --> D[KEM Ciphertext]`}
-			/>
-			<p class="text-center text-fg-muted/60 text-sm italic -mt-4 mb-8">
+			<div class="flex justify-center my-8">
+				<img src="/diagrams/encapsulation.svg" alt="Key encapsulation" class="w-full max-w-md" />
+			</div>
+			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
 				Figure 4: Key encapsulation produces shared secret and ciphertext
 			</p>
 
@@ -142,14 +120,10 @@
 
 			<h3 class="text-fg-muted mb-4">step 2.2: symmetric encryption</h3>
 
-			<Diagram
-				chart={`flowchart LR
-    A[Shared Secret] --> B[HKDF]
-    B --> C[AES-256-GCM]
-    D[Message] --> C
-    C --> E[Ciphertext]`}
-			/>
-			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+			<div class="flex justify-center my-8">
+				<img src="/diagrams/symmetric_encryption.svg" alt="Symmetric encryption" class="w-full max-w-md" />
+			</div>
+			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
 				Figure 5: Symmetric encryption using derived AES key
 			</p>
 
@@ -164,14 +138,10 @@
 
 			<h3 class="text-fg-muted mb-4">step 2.3: steganography</h3>
 
-			<Diagram
-				chart={`flowchart LR
-    A[KEM Ciphertext] --> C[Combine]
-    B[Ciphertext] --> C
-    C --> D[LSB Embed]
-    D --> E[Stego Image]`}
-			/>
-			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+			<div class="flex justify-center my-8">
+				<img src="/diagrams/steganography.svg" alt="Steganography" class="w-full max-w-md" />
+			</div>
+			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
 				Figure 6: LSB steganography embeds data in cover image
 			</p>
 
@@ -193,15 +163,10 @@
 				private key. the process is reversed:
 			</p>
 
-			<Diagram
-				chart={`flowchart LR
-    A[Stego Image] --> B[LSB Extract]
-    B --> C[ML-KEM]
-    D[Private Key] -.-> C
-    C --> E[AES-256-GCM]
-    E --> F[Message]`}
-			/>
-			<p class="text-center text-fg-muted/60 text-sm italic -mt-12 mb-8">
+			<div class="flex justify-center my-8">
+				<img src="/diagrams/full_decryption.svg" alt="Full decryption" class="w-full max-w-xl" />
+			</div>
+			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
 				Figure 7: Complete decryption process
 			</p>
 
@@ -275,6 +240,39 @@
 `}
 				</pre>
 			</div>
+		</section>
+
+		<!-- Performance -->
+		<section>
+			<h2 class="text-fg mb-4">performance</h2>
+			<div class="h-px bg-border mb-6"></div>
+
+			<p class="text-fg-muted mb-6 leading-relaxed">
+				all cryptographic operations complete in under 100 microseconds.
+				benchmarks were run in rust with 25,000 iterations.
+			</p>
+
+			<div class="flex justify-center">
+				<pre class="text-fg-muted text-sm overflow-x-auto leading-relaxed">
+{`
+  operation                    time
+  ─────────────────────────────────────
+  ML-KEM-768 key generation    44 μs
+  ML-KEM-768 encapsulation     41 μs
+  ML-KEM-768 decapsulation     53 μs
+  AES-256-GCM encryption       < 1 μs
+  LSB embedding                29 μs
+  LSB extraction               17 μs
+  ─────────────────────────────────────
+  total encryption            ~115 μs
+  total decryption             ~71 μs
+`}
+				</pre>
+			</div>
+
+			<p class="text-fg-muted mt-6 text-sm opacity-70">
+				benchmarks: AMD Ryzen 5 7535HS, rustc 1.90.0, Arch Linux
+			</p>
 		</section>
 
 		<!-- Footer -->
