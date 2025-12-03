@@ -267,6 +267,57 @@ def create_mlkem_chart():
     return svg
 
 
+def create_lsb_diagram():
+    """LSB embedding visualization."""
+    svg = f'''<svg viewBox="0 0 500 180" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="250" y="20" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="13">LSB Embedding Example</text>
+
+  <!-- Original byte section -->
+  <text x="20" y="55" fill="{COLORS['fg']}" font-family="monospace" font-size="11">original pixel (red = 180):</text>
+'''
+    # Original byte: 10110100 (180)
+    original = [1, 0, 1, 1, 0, 1, 0, 0]
+    for i, bit in enumerate(original):
+        x = 230 + i * 30
+        color = COLORS['aqua'] if i < 7 else COLORS['orange']
+        svg += f'''  <rect x="{x}" y="40" width="26" height="26" rx="3" fill="{COLORS['bg_card']}" stroke="{color}" stroke-width="2"/>
+  <text x="{x + 13}" y="58" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="14">{bit}</text>
+'''
+
+    # LSB label
+    svg += f'''  <text x="457" y="75" fill="{COLORS['orange']}" font-family="monospace" font-size="9">LSB</text>
+
+  <!-- Arrow and secret bit -->
+  <text x="20" y="100" fill="{COLORS['fg']}" font-family="monospace" font-size="11">secret bit to hide:</text>
+  <rect x="230" y="85" width="26" height="26" rx="3" fill="{COLORS['yellow']}" stroke="{COLORS['yellow']}" stroke-width="2"/>
+  <text x="243" y="103" fill="{COLORS['bg']}" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold">1</text>
+
+  <!-- Arrow -->
+  <path d="M 280 98 L 350 98" stroke="{COLORS['yellow']}" stroke-width="2" fill="none"/>
+  <polygon points="350,98 340,93 340,103" fill="{COLORS['yellow']}"/>
+  <text x="315" y="90" fill="{COLORS['fg']}" font-family="monospace" font-size="9" opacity="0.7">replace</text>
+
+  <!-- Modified byte section -->
+  <text x="20" y="145" fill="{COLORS['fg']}" font-family="monospace" font-size="11">modified pixel (red = 181):</text>
+'''
+    # Modified byte: 10110101 (181)
+    modified = [1, 0, 1, 1, 0, 1, 0, 1]
+    for i, bit in enumerate(modified):
+        x = 230 + i * 30
+        color = COLORS['yellow'] if i == 7 else COLORS['aqua']
+        svg += f'''  <rect x="{x}" y="130" width="26" height="26" rx="3" fill="{COLORS['bg_card']}" stroke="{color}" stroke-width="2"/>
+  <text x="{x + 13}" y="148" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="14">{bit}</text>
+'''
+
+    svg += f'''  <text x="457" y="165" fill="{COLORS['yellow']}" font-family="monospace" font-size="9">modified</text>
+
+  <!-- Explanation -->
+  <text x="250" y="175" fill="{COLORS['fg']}" text-anchor="middle" font-family="monospace" font-size="10" opacity="0.6">changing 180 → 181 is invisible to the human eye</text>
+</svg>'''
+    return svg
+
+
 def create_psnr_chart():
     """PSNR vs embedding rate chart."""
     # Data points: (capacity%, psnr)
@@ -346,6 +397,7 @@ def main():
         'steganography.svg': create_steganography(),
         'full_decryption.svg': create_full_decryption(),
         'mlkem_chart.svg': create_mlkem_chart(),
+        'lsb_diagram.svg': create_lsb_diagram(),
         'psnr_chart.svg': create_psnr_chart(),
     }
 

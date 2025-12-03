@@ -126,6 +126,41 @@
 			</p>
 		</section>
 
+		<!-- What is LSB -->
+		<section>
+			<h2 class="text-fg mb-4">what is LSB?</h2>
+			<div class="h-px bg-border mb-6"></div>
+
+			<p class="text-fg-muted mb-8 leading-relaxed">
+				every pixel in an image has color values stored as 8-bit numbers
+				(0-255). the least significant bit (LSB) is the rightmost bit —
+				changing it only shifts the value by 1. for example, changing
+				a red value from 180 to 181 is completely invisible to the
+				human eye.
+			</p>
+
+			<div class="flex justify-center">
+				<img src="/diagrams/lsb_diagram.svg" alt="lsb embedding" class="w-full max-w-lg" />
+			</div>
+			<p class="text-center text-fg-muted/50 text-sm italic mt-2">
+				lsb embedding example
+			</p>
+
+			<p class="text-fg-muted my-8 leading-relaxed">
+				each pixel has three color channels (red, green, blue), so each
+				pixel can hide 3 bits of data. a 1000×1000 image has 1 million
+				pixels — that's 375 KB of hiding capacity.
+			</p>
+
+			<p class="text-fg-muted leading-relaxed">
+				LSB steganography is hard to detect because the changes are
+				statistically random and visually imperceptible. detection tools
+				look for unusual patterns in pixel values, but at low embedding
+				rates (typical for text messages), the modifications blend
+				perfectly into the natural noise present in any digital image.
+			</p>
+		</section>
+
 		<!-- Decryption -->
 		<section>
 			<h2 class="text-fg mb-4">decryption</h2>
