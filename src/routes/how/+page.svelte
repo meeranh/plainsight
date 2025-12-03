@@ -20,14 +20,61 @@
 		<!-- Header -->
 		<header>
 			<h1 class="text-fg text-xl mb-4">how it works</h1>
-			<div class="h-px bg-border mb-6"></div>
-			<p class="text-fg-muted leading-relaxed">
-				plainsight combines post-quantum cryptography with steganography.
-				your message is encrypted so that even quantum computers can't
-				break it, then hidden inside an ordinary image that looks
-				completely normal to anyone who sees it.
-			</p>
+			<div class="h-px bg-border"></div>
 		</header>
+
+		<!-- Introduction -->
+		<section>
+			<h2 class="text-fg mb-4">introduction</h2>
+			<div class="h-px bg-border mb-6"></div>
+
+			<h3 class="text-fg-muted mb-3">what is steganography?</h3>
+			<p class="text-fg-muted mb-8 leading-relaxed">
+				steganography is the art of hiding messages in plain sight.
+				unlike encryption (which scrambles a message so it can't be
+				read), steganography hides the message inside something
+				ordinary — like an image. anyone looking at the image sees
+				just a normal picture.
+			</p>
+
+			<h3 class="text-fg-muted mb-3">what is post-quantum encryption?</h3>
+			<p class="text-fg-muted mb-8 leading-relaxed">
+				today's encryption (RSA, elliptic curves) can be broken by
+				quantum computers using Shor's algorithm. post-quantum
+				cryptography uses mathematical problems that remain hard even
+				for quantum computers. ML-KEM is a lattice-based algorithm
+				standardized by NIST in 2024 specifically for this purpose.
+			</p>
+
+			<h3 class="text-fg-muted mb-3">what is LSB encoding?</h3>
+			<p class="text-fg-muted mb-8 leading-relaxed">
+				every pixel in an image has color values stored as 8-bit
+				numbers (0-255). the least significant bit (LSB) is the
+				rightmost bit — changing it only shifts the value by 1.
+				for example, changing a red value from 180 to 181 is
+				completely invisible to the human eye.
+			</p>
+
+			<div class="flex justify-center">
+				<img src="/diagrams/lsb_diagram.svg" alt="lsb embedding" class="w-full max-w-lg" />
+			</div>
+			<p class="text-center text-fg-muted/50 text-sm italic mt-2">
+				lsb embedding example
+			</p>
+
+			<p class="text-fg-muted my-8 leading-relaxed">
+				each pixel has three color channels (red, green, blue), so
+				each pixel can hide 3 bits of data. a 1000×1000 image has
+				1 million pixels — that's 375 KB of hiding capacity.
+			</p>
+
+			<p class="text-fg-muted leading-relaxed">
+				LSB steganography is hard to detect because the changes are
+				statistically random and visually imperceptible. detection
+				tools look for unusual patterns, but at low embedding rates
+				the modifications blend into the natural noise of any image.
+			</p>
+		</section>
 
 		<!-- The Big Picture -->
 		<section>
@@ -35,10 +82,10 @@
 			<div class="h-px bg-border mb-6"></div>
 
 			<p class="text-fg-muted mb-8 leading-relaxed">
-				to send a secret message, you only need the receiver's public key.
-				the system encrypts your message and hides it inside an image.
-				the image can be shared anywhere — social media, email, messaging
-				apps — without raising suspicion.
+				plainsight combines these ideas: your message is encrypted
+				with ML-KEM-768 and AES-256-GCM, then hidden inside an image
+				using LSB encoding. the image can be shared anywhere —
+				social media, email, messaging apps — without raising suspicion.
 			</p>
 
 			<div class="flex justify-center">
@@ -49,9 +96,9 @@
 			</p>
 
 			<p class="text-fg-muted my-8 leading-relaxed">
-				the receiver extracts and decrypts the message using their private
-				key. if anyone tampers with the image, the decryption fails
-				automatically — the system detects modifications.
+				the receiver extracts and decrypts the message using their
+				private key. if anyone tampers with the image, the decryption
+				fails automatically — the system detects modifications.
 			</p>
 
 			<div class="flex justify-center">
@@ -68,9 +115,9 @@
 			<div class="h-px bg-border mb-6"></div>
 
 			<p class="text-fg-muted mb-8 leading-relaxed">
-				the receiver generates a keypair using ML-KEM-768, a lattice-based
-				algorithm standardized by NIST in 2024. unlike RSA or elliptic
-				curves, lattice problems remain hard even for quantum computers.
+				the receiver generates a keypair using ML-KEM-768. the public
+				key can be shared with anyone who wants to send them a message.
+				the private key is kept secret and used for decryption.
 			</p>
 
 			<div class="flex justify-center">
@@ -113,9 +160,8 @@
 			</p>
 
 			<p class="text-fg-muted my-8 leading-relaxed">
-				finally, the encrypted data is hidden inside an image using LSB
-				steganography. this modifies the least significant bit of each
-				color channel — a change invisible to the human eye.
+				finally, the encrypted data is hidden inside an image using
+				LSB steganography.
 			</p>
 
 			<div class="flex justify-center">
@@ -123,41 +169,6 @@
 			</div>
 			<p class="text-center text-fg-muted/50 text-sm italic mt-2">
 				lsb steganography
-			</p>
-		</section>
-
-		<!-- What is LSB -->
-		<section>
-			<h2 class="text-fg mb-4">what is LSB?</h2>
-			<div class="h-px bg-border mb-6"></div>
-
-			<p class="text-fg-muted mb-8 leading-relaxed">
-				every pixel in an image has color values stored as 8-bit numbers
-				(0-255). the least significant bit (LSB) is the rightmost bit —
-				changing it only shifts the value by 1. for example, changing
-				a red value from 180 to 181 is completely invisible to the
-				human eye.
-			</p>
-
-			<div class="flex justify-center">
-				<img src="/diagrams/lsb_diagram.svg" alt="lsb embedding" class="w-full max-w-lg" />
-			</div>
-			<p class="text-center text-fg-muted/50 text-sm italic mt-2">
-				lsb embedding example
-			</p>
-
-			<p class="text-fg-muted my-8 leading-relaxed">
-				each pixel has three color channels (red, green, blue), so each
-				pixel can hide 3 bits of data. a 1000×1000 image has 1 million
-				pixels — that's 375 KB of hiding capacity.
-			</p>
-
-			<p class="text-fg-muted leading-relaxed">
-				LSB steganography is hard to detect because the changes are
-				statistically random and visually imperceptible. detection tools
-				look for unusual patterns in pixel values, but at low embedding
-				rates (typical for text messages), the modifications blend
-				perfectly into the natural noise present in any digital image.
 			</p>
 		</section>
 
@@ -224,10 +235,10 @@
 			<div class="h-px bg-border mb-6"></div>
 
 			<p class="text-fg-muted mb-8 leading-relaxed">
-				LSB steganography changes pixel values by at most 1. the
-				modifications are invisible to the human eye. PSNR (peak
-				signal-to-noise ratio) measures image quality — values above
-				40 dB are considered imperceptible.
+				PSNR (peak signal-to-noise ratio) measures image quality —
+				values above 40 dB are considered imperceptible to humans.
+				even at 100% capacity, PSNR stays above 51 dB. in practice,
+				a typical message uses less than 1% of capacity.
 			</p>
 
 			<div class="flex justify-center">
@@ -235,12 +246,6 @@
 			</div>
 			<p class="text-center text-fg-muted/50 text-sm italic mt-2">
 				psnr vs embedding capacity
-			</p>
-
-			<p class="text-fg-muted mt-8 leading-relaxed">
-				even at 100% capacity, PSNR stays above 51 dB. in practice, a
-				typical message uses less than 1% of capacity, resulting in
-				PSNR well above 60 dB.
 			</p>
 		</section>
 
