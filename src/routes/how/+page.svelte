@@ -16,290 +16,162 @@
 		&larr; back
 	</button>
 
-	<article class="space-y-16">
+	<article class="space-y-20">
 		<!-- Header -->
 		<header>
 			<h1 class="text-fg text-xl mb-4">how it works</h1>
 			<div class="h-px bg-border mb-6"></div>
 			<p class="text-fg-muted leading-relaxed">
-				a technical overview of how plainsight combines post-quantum
-				cryptography with steganography to hide encrypted messages
-				inside ordinary images.
+				post-quantum encryption meets steganography. your message is
+				encrypted with ML-KEM-768 and AES-256-GCM, then hidden inside
+				an ordinary image using LSB encoding.
 			</p>
 		</header>
 
-		<!-- The Big Picture -->
-		<section>
-			<h2 class="text-fg mb-4">the big picture</h2>
-			<div class="h-px bg-border mb-6"></div>
-
-			<p class="text-fg-muted mb-6 leading-relaxed">
-				the system combines three cryptographic techniques to ensure
-				your message is both encrypted and hidden:
-			</p>
-
-			<div class="flex justify-center my-8">
-				<img src="/diagrams/encryption_flow.svg" alt="Encryption flow" class="w-full max-w-xl" />
-			</div>
-			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
-				Figure 1: Encryption flow — sender encapsulates, encrypts, and embeds
-			</p>
-
-			<p class="text-fg-muted my-8 leading-relaxed">
-				the receiver shares their public key with anyone who wants to send them
-				a message. the stego image can be shared publicly - it looks like
-				any normal image.
-			</p>
-
-			<div class="flex justify-center my-8">
-				<img src="/diagrams/decryption_flow.svg" alt="Decryption flow" class="w-full max-w-xl" />
-			</div>
-			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
-				Figure 2: Decryption flow — receiver extracts, decapsulates, and decrypts
-			</p>
-
-			<p class="text-fg-muted leading-relaxed">
-				even if someone intercepts the image, they see nothing
-				suspicious. even if they suspect hidden data, they can't
-				decrypt it without the private key. even with a quantum
-				computer, the encryption remains secure.
-			</p>
-		</section>
-
-		<!-- Key Generation -->
-		<section>
-			<h2 class="text-fg mb-4">1. key generation</h2>
-			<div class="h-px bg-border mb-6"></div>
-
-			<p class="text-fg-muted mb-6 leading-relaxed">
-				the receiver generates an ML-KEM-768 keypair. this is a
-				lattice-based cryptographic system that resists attacks
-				from both classical and quantum computers.
-			</p>
-
-			<div class="flex justify-center my-8">
-				<img src="/diagrams/keygen.svg" alt="Key generation" class="w-full max-w-md" />
-			</div>
-			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
-				Figure 3: ML-KEM-768 key pair generation
-			</p>
-
-			<div class="border border-border p-4 bg-bg-card">
-				<p class="text-fg-muted text-sm">
-					<span class="text-yellow">why ML-KEM?</span> RSA and ECC can be
-					broken by Shor's algorithm on a quantum computer. ML-KEM is
-					based on the hardness of lattice problems, which remain hard
-					even for quantum computers. NIST standardized it in 2024.
-				</p>
-			</div>
-		</section>
-
 		<!-- Encryption Flow -->
 		<section>
-			<h2 class="text-fg mb-4">2. encryption (sender)</h2>
-			<div class="h-px bg-border mb-6"></div>
-
-			<p class="text-fg-muted mb-6 leading-relaxed">
-				the sender uses the receiver's public key to encrypt a message.
-				this happens in three steps:
-			</p>
-
-			<h3 class="text-fg-muted mb-4">step 2.1: key encapsulation</h3>
-
-			<div class="flex justify-center my-8">
-				<img src="/diagrams/encapsulation.svg" alt="Key encapsulation" class="w-full max-w-md" />
+			<div class="flex justify-center">
+				<img src="/diagrams/encryption_flow.svg" alt="encryption flow" class="w-full" />
 			</div>
-			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
-				Figure 4: Key encapsulation produces shared secret and ciphertext
-			</p>
-
-			<p class="text-fg-muted mb-8 leading-relaxed">
-				the shared secret is random and known only to sender and
-				receiver. the kem ciphertext is sent along with the message.
-			</p>
-
-			<h3 class="text-fg-muted mb-4">step 2.2: symmetric encryption</h3>
-
-			<div class="flex justify-center my-8">
-				<img src="/diagrams/symmetric_encryption.svg" alt="Symmetric encryption" class="w-full max-w-md" />
-			</div>
-			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
-				Figure 5: Symmetric encryption using derived AES key
-			</p>
-
-			<div class="border border-border p-4 bg-bg-card mb-8">
-				<p class="text-fg-muted text-sm">
-					<span class="text-yellow">why AES-GCM?</span> ML-KEM is a key
-					encapsulation mechanism, not an encryption algorithm. we use
-					the shared secret to derive an AES key for actual encryption.
-					GCM mode provides both confidentiality and integrity.
-				</p>
-			</div>
-
-			<h3 class="text-fg-muted mb-4">step 2.3: steganography</h3>
-
-			<div class="flex justify-center my-8">
-				<img src="/diagrams/steganography.svg" alt="Steganography" class="w-full max-w-md" />
-			</div>
-			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
-				Figure 6: LSB steganography embeds data in cover image
-			</p>
-
-			<p class="text-fg-muted leading-relaxed">
-				LSB (Least Significant Bit) steganography modifies the least
-				important bit of each color channel. changing 10110100 to
-				10110101 is invisible to the human eye but encodes one bit
-				of hidden data.
+			<p class="text-center text-fg-muted/50 text-sm italic mt-4">
+				sender encrypts and embeds the message using the receiver's public key
 			</p>
 		</section>
 
 		<!-- Decryption Flow -->
 		<section>
-			<h2 class="text-fg mb-4">3. decryption (receiver)</h2>
-			<div class="h-px bg-border mb-6"></div>
-
-			<p class="text-fg-muted mb-6 leading-relaxed">
-				the receiver extracts and decrypts the message using their
-				private key. the process is reversed:
-			</p>
-
-			<div class="flex justify-center my-8">
-				<img src="/diagrams/full_decryption.svg" alt="Full decryption" class="w-full max-w-xl" />
+			<div class="flex justify-center">
+				<img src="/diagrams/decryption_flow.svg" alt="decryption flow" class="w-full" />
 			</div>
-			<p class="text-center text-fg-muted/60 text-sm italic mb-8">
-				Figure 7: Complete decryption process
-			</p>
-
-			<p class="text-fg-muted leading-relaxed">
-				only the holder of the private key can recover the shared
-				secret and decrypt the message. the GCM auth tag ensures
-				the message wasn't tampered with.
+			<p class="text-center text-fg-muted/50 text-sm italic mt-4">
+				receiver extracts and decrypts using their private key
 			</p>
 		</section>
 
-		<!-- Security Properties -->
+		<!-- Divider -->
+		<div class="h-px bg-border"></div>
+
+		<!-- Key Generation -->
 		<section>
-			<h2 class="text-fg mb-4">security properties</h2>
-			<div class="h-px bg-border mb-6"></div>
-
-			<div class="space-y-4">
-				<div class="border border-border p-4 bg-bg-card">
-					<p class="text-green text-sm mb-2">quantum resistance</p>
-					<p class="text-fg-muted text-sm">
-						ML-KEM-768 provides NIST security level 3, equivalent to
-						AES-192. safe against known quantum algorithms.
-					</p>
-				</div>
-
-				<div class="border border-border p-4 bg-bg-card">
-					<p class="text-green text-sm mb-2">forward secrecy</p>
-					<p class="text-fg-muted text-sm">
-						each message uses a fresh shared secret. compromising one
-						message doesn't compromise others.
-					</p>
-				</div>
-
-				<div class="border border-border p-4 bg-bg-card">
-					<p class="text-green text-sm mb-2">authenticated encryption</p>
-					<p class="text-fg-muted text-sm">
-						AES-GCM provides integrity verification. any tampering
-						with the ciphertext will be detected.
-					</p>
-				</div>
-
-				<div class="border border-border p-4 bg-bg-card">
-					<p class="text-green text-sm mb-2">plausible deniability</p>
-					<p class="text-fg-muted text-sm">
-						the stego image looks like any other image. without
-						knowing to look, no one knows there's hidden data.
-					</p>
-				</div>
+			<h2 class="text-fg mb-6">key generation</h2>
+			<div class="flex justify-center">
+				<img src="/diagrams/keygen.svg" alt="key generation" class="w-full max-w-md" />
 			</div>
+			<p class="text-center text-fg-muted/50 text-sm italic mt-4">
+				ml-kem-768 keypair generation — lattice-based, quantum-resistant
+			</p>
+		</section>
+
+		<!-- Encapsulation -->
+		<section>
+			<h2 class="text-fg mb-6">key encapsulation</h2>
+			<div class="flex justify-center">
+				<img src="/diagrams/encapsulation.svg" alt="key encapsulation" class="w-full max-w-md" />
+			</div>
+			<p class="text-center text-fg-muted/50 text-sm italic mt-4">
+				encapsulation produces a shared secret and kem ciphertext
+			</p>
+		</section>
+
+		<!-- Symmetric Encryption -->
+		<section>
+			<h2 class="text-fg mb-6">symmetric encryption</h2>
+			<div class="flex justify-center">
+				<img src="/diagrams/symmetric_encryption.svg" alt="symmetric encryption" class="w-full max-w-lg" />
+			</div>
+			<p class="text-center text-fg-muted/50 text-sm italic mt-4">
+				shared secret derives an aes-256-gcm key for authenticated encryption
+			</p>
+		</section>
+
+		<!-- Steganography -->
+		<section>
+			<h2 class="text-fg mb-6">steganography</h2>
+			<div class="flex justify-center">
+				<img src="/diagrams/steganography.svg" alt="steganography" class="w-full max-w-lg" />
+			</div>
+			<p class="text-center text-fg-muted/50 text-sm italic mt-4">
+				lsb encoding hides ciphertext in the least significant bits of pixel values
+			</p>
+		</section>
+
+		<!-- Full Decryption -->
+		<section>
+			<h2 class="text-fg mb-6">decryption</h2>
+			<div class="flex justify-center">
+				<img src="/diagrams/full_decryption.svg" alt="full decryption" class="w-full" />
+			</div>
+			<p class="text-center text-fg-muted/50 text-sm italic mt-4">
+				complete decryption pipeline — only the private key holder can recover the message
+			</p>
+		</section>
+
+		<!-- Divider -->
+		<div class="h-px bg-border"></div>
+
+		<!-- ML-KEM Performance -->
+		<section>
+			<h2 class="text-fg mb-6">ml-kem performance</h2>
+			<div class="flex justify-center">
+				<img src="/diagrams/mlkem_chart.svg" alt="ml-kem performance" class="w-full max-w-md" />
+			</div>
+			<p class="text-center text-fg-muted/50 text-sm italic mt-4">
+				all operations complete in under 80 μs — benchmarked with 25,000 iterations
+			</p>
+		</section>
+
+		<!-- Operation Times -->
+		<section>
+			<h2 class="text-fg mb-6">operation times</h2>
+			<div class="flex justify-center">
+				<pre class="text-fg-muted text-sm leading-relaxed">
+{`  operation                    time
+  ─────────────────────────────────────
+  ml-kem-768 key generation    44 μs
+  ml-kem-768 encapsulation     41 μs
+  ml-kem-768 decapsulation     53 μs
+  aes-256-gcm encryption       < 1 μs
+  lsb embedding                29 μs
+  lsb extraction               17 μs
+  ─────────────────────────────────────
+  total encryption            ~115 μs
+  total decryption             ~71 μs`}
+				</pre>
+			</div>
+			<p class="text-center text-fg-muted/50 text-sm italic mt-4">
+				amd ryzen 5 7535HS, rustc 1.90.0, arch linux
+			</p>
+		</section>
+
+		<!-- PSNR Chart -->
+		<section>
+			<h2 class="text-fg mb-6">image quality</h2>
+			<div class="flex justify-center">
+				<img src="/diagrams/psnr_chart.svg" alt="psnr vs embedding rate" class="w-full max-w-sm" />
+			</div>
+			<p class="text-center text-fg-muted/50 text-sm italic mt-4">
+				psnr stays above 51 db even at 100% capacity — 40 db is the visibility threshold
+			</p>
 		</section>
 
 		<!-- Data Sizes -->
 		<section>
-			<h2 class="text-fg mb-4">data sizes</h2>
-			<div class="h-px bg-border mb-6"></div>
-
+			<h2 class="text-fg mb-6">data sizes</h2>
 			<div class="flex justify-center">
-				<pre class="text-fg-muted text-sm overflow-x-auto leading-relaxed">
-{`
-  component              size
+				<pre class="text-fg-muted text-sm leading-relaxed">
+{`  component              size
   ─────────────────────────────────────
-  ML-KEM public key      1,184 bytes
-  ML-KEM private key     2,400 bytes
-  ML-KEM ciphertext      1,088 bytes
-  AES-GCM IV                12 bytes
-  AES-GCM auth tag          16 bytes
+  ml-kem public key      1,184 bytes
+  ml-kem private key     2,400 bytes
+  ml-kem ciphertext      1,088 bytes
+  aes-gcm iv                12 bytes
+  aes-gcm auth tag          16 bytes
   ─────────────────────────────────────
   overhead per message   ~1,116 bytes
 
-  a 500×500 image can hide ~93 KB
-  a 1000×1000 image can hide ~375 KB
-`}
+  500×500 image capacity     ~93 kb
+  1000×1000 image capacity  ~375 kb`}
 				</pre>
-			</div>
-		</section>
-
-		<!-- Performance -->
-		<section>
-			<h2 class="text-fg mb-4">performance</h2>
-			<div class="h-px bg-border mb-6"></div>
-
-			<p class="text-fg-muted mb-6 leading-relaxed">
-				all cryptographic operations complete in under 100 microseconds.
-				benchmarks were run in rust with 25,000 iterations.
-			</p>
-
-			<div class="flex justify-center my-8">
-				<img src="/diagrams/mlkem_chart.svg" alt="ML-KEM Performance" class="w-full max-w-md" />
-			</div>
-
-			<div class="flex justify-center">
-				<pre class="text-fg-muted text-sm overflow-x-auto leading-relaxed">
-{`
-  operation                    time
-  ─────────────────────────────────────
-  ML-KEM-768 key generation    44 μs
-  ML-KEM-768 encapsulation     41 μs
-  ML-KEM-768 decapsulation     53 μs
-  AES-256-GCM encryption       < 1 μs
-  LSB embedding                29 μs
-  LSB extraction               17 μs
-  ─────────────────────────────────────
-  total encryption            ~115 μs
-  total decryption             ~71 μs
-`}
-				</pre>
-			</div>
-
-			<p class="text-fg-muted mt-6 text-sm opacity-70">
-				benchmarks: AMD Ryzen 5 7535HS, rustc 1.90.0, Arch Linux
-			</p>
-		</section>
-
-		<!-- Image Quality -->
-		<section>
-			<h2 class="text-fg mb-4">image quality</h2>
-			<div class="h-px bg-border mb-6"></div>
-
-			<p class="text-fg-muted mb-6 leading-relaxed">
-				LSB steganography introduces minimal distortion. even at 100%
-				capacity, PSNR remains above 51 dB — well above the 40 dB
-				threshold where changes become visible to humans.
-			</p>
-
-			<div class="flex justify-center my-8">
-				<img src="/diagrams/psnr_chart.svg" alt="PSNR vs Embedding Rate" class="w-full max-w-sm" />
-			</div>
-
-			<div class="border border-border p-4 bg-bg-card">
-				<p class="text-fg-muted text-sm">
-					<span class="text-yellow">typical usage:</span> a 1000-character
-					message in a 1024×768 image uses only ~0.7% capacity, resulting
-					in PSNR well above 60 dB. the modifications are completely invisible.
-				</p>
 			</div>
 		</section>
 
@@ -307,10 +179,10 @@
 		<footer class="border-t border-dashed border-border pt-8">
 			<p class="text-fg-muted/50 text-sm">
 				implementation uses
-				<span class="text-fg-muted">@noble/post-quantum</span> for ML-KEM,
-				<span class="text-fg-muted">Web Crypto API</span> for AES-GCM, and
-				<span class="text-fg-muted">Canvas API</span> for steganography.
-				all cryptographic operations run client-side in your browser.
+				<span class="text-fg-muted">@noble/post-quantum</span> for ml-kem,
+				<span class="text-fg-muted">web crypto api</span> for aes-gcm, and
+				<span class="text-fg-muted">canvas api</span> for steganography.
+				all operations run client-side.
 			</p>
 		</footer>
 	</article>
